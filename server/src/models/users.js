@@ -7,7 +7,9 @@ const userSchema = new mongoose.Schema({
       type: String,   
       enum: ['rider', 'passenger', 'admin'],
       default: 'passenger'
-      }
+      },
+      favorite: Array,
+      cartItems: Array
   });
   
   const Users = mongoose.model('Users', userSchema);

@@ -2,3 +2,15 @@
   background-color: aqua;
   height: 300px;
 }
+
+.Card{
+  width: 500px;
+  height: 220px;
+  margin: 10px;
+  padding: 10px;
+  background-color:antiquewhite;
+}
+
+.Products{
+  display: flex;
+}

@@ -1,22 +1,19 @@
 const express = require('express')
-const mongoose = require('mongoose')
+
 const UsersRoutes = require('./routes/users')
+const ProductsRoutes = require('./routes/products')
+const cors = require('cors')
+const connectDb = require('./db/connection')
 const app = express()
-app.use(UsersRoutes)
+require('dotenv').config()
+app.use(cors())
 app.use(express.json())
-const connectDb= async()=> {
- try{
-  const res = await mongoose.connect('mongodb://127.0.0.1:27017/sahayatriDb');
-  if(res) console.log('connected to mongodb')
- }catch(err){
-  console.log(err)
- }
-}
+app.use(UsersRoutes)
+app.use(ProductsRoutes)
+
+
 connectDb()
-const port = 3005
+const port = process.env.PORT
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
 })
-
-
-
