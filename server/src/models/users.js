@@ -9,7 +9,8 @@ const userSchema = new mongoose.Schema({
       default: 'passenger'
       },
       favorite: Array,
-      cartItems: Array
+      cartItems: Array,
+      
   });
   
   const Users = mongoose.model('Users', userSchema);
