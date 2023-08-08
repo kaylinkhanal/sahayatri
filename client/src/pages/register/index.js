@@ -41,7 +41,7 @@ export default function Register() {
 	return (
 		<div className="flex w-5/6  justify-center  m-auto mt-4">
 			<div className="flex flex-col w-full sm:w-3/4 md:w-2/4  lg:w-2/4 xl:w-96  justify-center ">
-				<h1 className=" text-lg mt-4 w-full text-center md:text-2xl">
+				<h1 className=" text-lg mt-4 w-full text-center md:text-2xl font-semibold">
 					Create your account now
 				</h1>
 				<Formik
