@@ -1,6 +1,7 @@
 import React from 'react';
 import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
+import Image from 'next/image';
 
 const SignupSchema = Yup.object().shape({
   firstName: Yup.string()
@@ -16,7 +17,8 @@ const SignupSchema = Yup.object().shape({
 
  const Login = () => (
   <div>
-    <h1>Signup</h1>
+    <h1>Login</h1>
+    <Image src={'/sahayatri.jpeg'} width={100}  height={100} alt="logo"/>
     <Formik
       initialValues={{
         firstName: '',
