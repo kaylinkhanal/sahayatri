@@ -3,12 +3,15 @@
 ## Features
 - [ ] multi user register/login-> rider, user
 - [ ] map integrate
-- [ ] rider: accept/reject ride  
+- [ ] referal / promo code
+- [ ] scheduled ride
+- [ ] favorite
 - [ ] user: cancel ride
 - [ ] rating system
+- [ ] SOS 
 - [ ] ride history: rider and user
 - [ ] live location tracking
-- [ ] SOS 
+
 
 
 ## First Phase

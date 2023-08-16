@@ -1,4 +1,4 @@
-const mongoose = require('mongoose')
+const mongoose = require("mongoose");
 const userSchema = new mongoose.Schema({
     fullName: String, // String is shorthand for {type: String}
     phoneNumber: Number,
@@ -7,7 +7,8 @@ const userSchema = new mongoose.Schema({
       type: String,   
       enum: ['rider', 'passenger', 'admin'],
       default: 'passenger'
-      }
+      },
+ 
   });
   
   const Users = mongoose.model('Users', userSchema);

@@ -21,18 +21,19 @@ const registerNewUser = async(req,res)=>{
   }
 
 const loginUser = async(req,res)=>{
-console.log(req.body)
- //req.body -> phoneNumber, password
-  const data = await Users.findOne({phoneNumber: req.body.phoneNumber})
 
+ //req.body -> phoneNumber, password
+  const data = await Users.findOne({phoneNumber: req.body.phoneNumber}).lean()
   if(data){
   const isMatched = await bcrypt.compare(req.body.password, data.password)
         if(isMatched){
+        const {password, ...userDetails} = data
         //token generating logic          
-        var token = jwt.sign({ foo: 'bar' }, 'shhhhh');
+        const token = jwt.sign({ phoneNumber: req.body.phoneNumber }, process.env.SECRET_KEY);
           res.json({
             success: true,
-            token
+            token,
+            userDetails
           })
         }else{
           res.json({
