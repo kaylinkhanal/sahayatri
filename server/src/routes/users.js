@@ -1,10 +1,14 @@
-const express=require('express')
-const router = express.Router()
-const {registerNewUser, loginUser} = require('../controllers/users')
-router.post('/register', registerNewUser)
+const express = require("express");
+const router = express.Router();
+const {
+  registerNewUser,
+  loginUser,
+  switchUserMode,
+} = require("../controllers/users");
+router.post("/register", registerNewUser);
 
-router.post('/login', loginUser)
+router.post("/login", loginUser);
 
-module.exports = router
+router.patch("/switchUser/:userId", switchUserMode);
 
-
+module.exports = router;
