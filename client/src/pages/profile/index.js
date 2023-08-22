@@ -13,7 +13,11 @@ import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import Switch from "@mui/material/Switch";
-import { updateUserDetails } from "@/redux/reducerSlices/userSlice";
+import {
+  handleLogout,
+  updateUserDetails,
+} from "@/redux/reducerSlices/userSlice";
+import { useRouter } from "next/router";
 
 const label = { inputProps: { "aria-label": "Switch demo" } };
 
@@ -97,11 +101,42 @@ const VehicleForm = (props) => {
 
 // Change password form
 const ChangePasswordForm = () => {
+  const dispatch = useDispatch();
+  const router = useRouter();
+
   // To show and hide form
   const [isOpen, setIsOpen] = useState(false);
 
+  // Get userId from the store
+  const userId = useSelector((state) => state.user.userDetails)?._id;
+
   const handleFormOpen = () => {
     setIsOpen((currState) => !currState);
+  };
+
+  const handleChangePassword = async (values) => {
+    const response = await fetch(
+      `http://localhost:8000/changeUserPassword/${userId}`,
+      {
+        method: "PATCH",
+        body: JSON.stringify({
+          passwordCurrent: values.passwordCurrent,
+          password: values.password,
+        }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    const result = await response.json();
+    if (result.success) {
+      // If result is success, update the userDetails in the store -> role should be updated in the store too.
+      dispatch(handleLogout());
+      router.push("login");
+      alert("Password changed successfully! Please login again!");
+    } else {
+      console.log(result.message);
+    }
   };
 
   // Update Password Schema
@@ -153,8 +188,9 @@ const ChangePasswordForm = () => {
           passwordConfirm: "",
         }}
         validationSchema={ChangePasswordSchema}
-        onSubmit={(values) => {
-          console.log(values);
+        onSubmit={(values, resetForm) => {
+          handleChangePassword(values);
+          resetForm();
         }}
       >
         {({ errors, touched }) => (
@@ -279,7 +315,7 @@ const index = () => {
       // If result is success, update the userDetails in the store -> role should be updated in the store too.
       dispatch(updateUserDetails(result));
     } else {
-      console.log("Something went wrong!");
+      console.log(result.message);
     }
   };
 
