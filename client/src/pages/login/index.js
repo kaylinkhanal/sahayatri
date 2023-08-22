@@ -3,6 +3,7 @@ import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
 import { setUserDetails } from "../../redux/reducerSlices/userSlice";
 import { useDispatch, useSelector } from "react-redux";
+import { useRouter } from "next/router";
 const SignupSchema = Yup.object().shape({
   phoneNumber: Yup.string()
     .min(6, "Too Short!")
@@ -17,6 +18,7 @@ const SignupSchema = Yup.object().shape({
 
 export default function Login() {
   const dispatch = useDispatch();
+  const router = useRouter();
   const handleLogin = async (values) => {
     try {
       const response = await fetch("http://localhost:8000/login", {
@@ -29,6 +31,7 @@ export default function Login() {
       const result = await response.json();
       dispatch(setUserDetails(result));
       console.log(result);
+      router.push("/");
     } catch (error) {
       console.error("Error posting data:", error);
     }
