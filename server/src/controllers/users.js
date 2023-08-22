@@ -81,7 +81,7 @@ const switchUserMode = async (req, res) => {
         new: true,
         runValidators: true,
       }
-    );
+    ).select("-password");
 
     // if no any user found with the given id, return fail message
     if (!user)
@@ -90,12 +90,10 @@ const switchUserMode = async (req, res) => {
         message: "No user associated with that phone number found!",
       });
 
-    // Switch the role of user
-
     // if everthing went well, send response of success and with user details
     res.status(200).json({
       success: true,
-      user,
+      userDetails: user,
     });
   } catch (err) {
     res.status(404).json({

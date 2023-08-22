@@ -23,7 +23,6 @@ const getVehicleDetailsById = async (req, res) => {
   const data = await Vehicles.findById(req.params.vehicleId);
   res.json({ data });
 };
-
 const getAllVehicles = async (req, res) => {
   const totalCount = await Vehicles.find().count();
   const skipCount = (req.query.page - 1) * req.query.limit;
