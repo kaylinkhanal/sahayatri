@@ -1,26 +1,18 @@
-import Image from "next/image";
-import { Inter } from "next/font/google";
-import { useEffect, useState } from "react";
-import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
-const inter = Inter({ subsets: ["latin"] });
-import NavBar from "@/components/Navbar";
-import Badge from "@mui/material/Badge";
-import MailIcon from "@mui/icons-material/Mail";
+import Image from 'next/image'
+import { Inter } from 'next/font/google'
+import Login from './login'
+import Home from './home'
 
-export default function Home() {
-	const [productsList, setProductsList] = useState([]);
+import { UseSelector, useSelector } from 'react-redux'
+const inter = Inter({ subsets: ['latin'] })
 
-	return <div></div>;
+export default function Main() {
+  const {isLoggedIn} =useSelector(state=> state.user)
+  if(isLoggedIn){
+    return <Home/>
+  }else{
+    return <Login/>
+  }
 }
 
-// {
-//  favlist: [ '234rfdfawerwe', '3erfr32r32', '312fdsafdsa'],
-//  cartList: []
-// }
 
-// redecers:{
-//   addToCart(state,actions){
-//     state.cartList
-//     //
-//   }
-// }

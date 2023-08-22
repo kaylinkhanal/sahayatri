@@ -1,73 +1,51 @@
-import React, {useState} from "react";
+import React,{useState} from 'react';
+import Box from '@mui/material/Box';
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
-import { Alert } from '@mui/material';
-import Link from "next/link";
-const SignupSchema = Yup.object().shape({
-	fullName: Yup.string()
-		.min(2, "Too Short!")
-		.max(50, "Too Long!")
-		.required("Required"),
-	phoneNumber: Yup.string()
-		.min(6, "Too Short!")
-		.max(15, "Too Long!")
-		.required("Required"),
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
+import Modal from '@mui/material/Modal';
 
-	password: Yup.string()
-		.min(6, "Too Short!")
-		.max(50, "Too Long!")
-		.required("Required"),
-	confirmPassword: Yup.string()
-		.oneOf([Yup.ref("password"), null], "Passwords do not match")
-		.required("Required"),
-});
+const style = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 400,
+  bgcolor: 'background.paper',
+  border: '2px solid #000',
+  boxShadow: 24,
+  p: 4,
+};
 
-export default function Register() {
-	const [responseMsg, setResponseMsg] = useState({ msgLabel: '', msgType:'' })
-	const registerUser = async (values) => {
-		try {
-			const response = await fetch("http://localhost:8000/register", {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify(values),
-			});
-			const result = await response.json();
-			if(response.status){
-				setResponseMsg({ msgLabel: result.msg,
-					 msgType: response.status== 409 ?'error': 'success' })
-			}
-			
-		} catch (error) {
-			setResponseMsg({ msgLabel: 'Something went wrong', msgType: 'error' })
-			console.error("Error posting data:", error);
-		}
-	};
+export default function BasicModal(props) {
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
 
-	return (
-		<div className="flex w-5/6  justify-center  m-auto mt-4">
-			<div className="flex flex-col w-full sm:w-3/4 md:w-2/4  lg:w-2/4 xl:w-96  justify-center ">
-				<h1 className=" text-lg mt-4 w-full text-center md:text-2xl font-semibold">
-					Create your account now
-				</h1>
-			
-				<Formik
+  return (
+    <div>
+      <Button onClick={handleOpen}>Open modal</Button>
+      <Modal
+        open={props.editOpen}
+        onClose={()=>props.setEditOpen(false)}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style}>
+        <Formik
 					initialValues={{
 						fullName: "",
 						phoneNumber: "",
-
 						password: "",
 					}}
-					validationSchema={SignupSchema}
 					onSubmit={(values) => {
 						// same shape as initial values
-						registerUser(values);
+					
 					}}
 				>
 					{({ errors, touched }) => (
 						<Form className="w-full flex flex-col justify-center mx-auto mt-10">
-						{responseMsg.msgType && <Alert severity={responseMsg.msgType} onClose={() => setResponseMsg({ msgLabel: '', msgType:'' })}> {responseMsg.msgLabel} </Alert>}
 						
 							<label
 								htmlFor="fullName"
@@ -131,11 +109,11 @@ export default function Register() {
 							>
 								Sign Up
 							</button>
-							<p>Already have an account? <Link href="/">Sign In</Link></p>
 						</Form>
 					)}
 				</Formik>
-			</div>
-		</div>
-	);
+        </Box>
+      </Modal>
+    </div>
+  );
 }
