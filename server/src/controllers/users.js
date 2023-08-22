@@ -105,4 +105,60 @@ const switchUserMode = async (req, res) => {
   }
 };
 
-module.exports = { registerNewUser, loginUser, switchUserMode };
+const changeUserPassword = async (req, res) => {
+  try {
+    const userId = req.params.userId;
+    const user = await Users.findById(userId).select("+password");
+
+    if (!user)
+      return res.status(404).json({
+        success: false,
+        message: "No user found with the given id!",
+      });
+
+    // Check if password matches
+    const isMatched = await bcrypt.compare(
+      req.body.passwordCurrent,
+      user.password
+    );
+
+    if (isMatched) {
+      const hashedPassword = await bcrypt.hash(req.body.password, 10);
+      req.body.password = hashedPassword;
+      const updatedUser = await Users.findByIdAndUpdate(
+        userId,
+        { password: req.body.password },
+        {
+          new: true,
+          runValidators: true,
+        }
+      ).select("-password");
+
+      if (updatedUser) {
+        res.status(200).json({
+          success: true,
+          user: updatedUser,
+        });
+      } else {
+        res.status(404).json({
+          success: false,
+          message: "Looks like the user isn't found!",
+        });
+      }
+    } else {
+      return res.status(401).json({
+        success: false,
+        message: "Your current password is wrong!",
+      });
+    }
+  } catch (err) {
+    console.log(err.message);
+  }
+};
+
+module.exports = {
+  registerNewUser,
+  loginUser,
+  switchUserMode,
+  changeUserPassword,
+};
