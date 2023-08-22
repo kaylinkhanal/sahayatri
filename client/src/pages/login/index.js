@@ -74,7 +74,7 @@ export default function Login() {
                 htmlFor="password"
                 className="block text-sm font-medium leading-6 text-gray-900 mt-5"
               >
-                Password
+                New Password
               </label>
               <Field
                 name="password"
