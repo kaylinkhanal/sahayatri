@@ -6,7 +6,7 @@ import * as Yup from 'yup';
  const Register = () => {
 
     const handleAddProducts = (values)=>{
-        fetch('http://localhost:8080/products', 
+        fetch('http://localhost:8000/products', 
         {method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body:JSON.stringify(values)})

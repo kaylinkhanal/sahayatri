@@ -1,7 +1,7 @@
 const express=require('express')
 const router = express.Router()
 const multer  = require('multer')
-const {addVehicles,getVehiclesByUserId } = require('../controllers/vehicles')
+const VehicleController = require('../controllers/vehicles')
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
       cb(null, 'uploads/vehicles')
@@ -13,11 +13,16 @@ const storage = multer.diskStorage({
   })
   
   const upload = multer({ storage: storage })
-router.post('/vehicles',upload.single('vehicleImage'), addVehicles)
+router.post('/vehicles',upload.single('vehicleImage'), VehicleController.addVehicles)
+router.get('/vehicles',  VehicleController.getAllVehicles)
+router.get('/vehicles/:vehicleId',  VehicleController.getVehicleDetailsById)
+router.get('/vehicle-image/:vehicleId',  VehicleController.getVehicleImageByVehicleId)
 
 
+// router.get('/vehicle-image/:userId',  getVehicleImageByUserId)
 
-router.get('/vehicles/:userId',  getVehiclesByUserId)
+
+router.get('/vehicles/:userId',  VehicleController.getVehiclesByUserId)
 module.exports = router
 
 

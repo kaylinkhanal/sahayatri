@@ -26,7 +26,7 @@ export default function Register() {
 	const [responseMsg, setResponseMsg] = useState({ msgLabel: '', msgType:'' })
 	const registerUser = async (values) => {
 		try {
-			const response = await fetch("http://localhost:8080/register", {
+			const response = await fetch("http://localhost:8000/register", {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",

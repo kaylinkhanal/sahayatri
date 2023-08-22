@@ -5,6 +5,8 @@ import { Formik, Form, Field } from "formik";
 import CustomModal from '../../components/Modal'
 import { useSelector } from 'react-redux'
 import Box from '@mui/material/Box';
+import CardMedia from '@mui/material/CardMedia';
+import Image from 'next/image'
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
@@ -13,18 +15,38 @@ import Switch from '@mui/material/Switch';
 
 const label = { inputProps: { 'aria-label': 'Switch demo' } };
 
-const VehicleForm = ()=> {
+const VehicleForm = (props)=> {
+  const {userDetails} = useSelector(state=>state.user)
   const [file,setFile] = useState(null)
+  const handleAddVehicle = async(values) => {
+    debugger;
+    var formData = new FormData();
+    Object.entries(values).map((item)=>{
+      formData.append(item[0], item[1]);
+    })
+    formData.append('vehicleImage', file);
+    formData.append('user', userDetails._id)
+
+    const response = await fetch("http://localhost:8000/vehicles", {
+      method: "POST",
+      body: formData,
+    });
+    const result = await response.json();
+    if(response.status===200){
+      props.setOpen(false)
+      props.fetchVehicleDetails()
+    }
+  }
   return (
     <div>
       	<Formik
 					initialValues={{
-						phoneNumber: "",
-						password: "",
+						vehicleNumber: "",
+						vehicleCategory: "",
 					}}
 					onSubmit={(values) => {
 						// same shape as initial values
-						// handleLogin(values);
+						handleAddVehicle(values);
 					}}
 				>
 					{({ errors, touched }) => (
@@ -70,7 +92,7 @@ const VehicleForm = ()=> {
   )
 }
 
-function index() {
+const index=()=> {
   const style = {
     position: 'absolute',
     top: '50%',
@@ -95,7 +117,7 @@ function index() {
     }
 
     const fetchVehicleDetails = async() => {
-      const response = await fetch(" http://localhost:8080/vehicles/"+userDetails._id);
+      const response = await fetch(" http://localhost:8000/vehicles/"+userDetails._id);
 			const result = await response.json();
       setVechicleDetails(result.data)
     }
@@ -129,7 +151,12 @@ function index() {
      <Typography sx={{ mb: 1.5 }} color="text.secondary">
      <strong>Vehcile Category:</strong> {vehicleDetails?.vehicleCategory}
      </Typography>
-   
+     <Image
+        width={100}
+        height={100}
+        src={'http://localhost:8000/products/'+userDetails._id}
+        alt="Live from space album cover"
+      />
    </CardContent>
  </Card>
           ) :  <Button onClick={handleOpen}>Add Vehicle</Button>}
@@ -142,7 +169,10 @@ function index() {
   aria-describedby="modal-modal-description"
 >
   <Box sx={style}>
-          <VehicleForm/>
+          <VehicleForm
+           setOpen={setOpen}
+           fetchVehicleDetails={fetchVehicleDetails}
+           />
   </Box>
 </Modal>
         
@@ -150,9 +180,7 @@ function index() {
     )}
        
    
-    <Box component="span" sx={{ p: 2, m:31, border: '1px dashed grey' }}>
       <Button>Change Password</Button>
-    </Box>
     </div>
   )
 }
