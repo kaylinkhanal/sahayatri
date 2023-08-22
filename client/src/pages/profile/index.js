@@ -203,7 +203,7 @@ const ChangePasswordForm = () => {
             }}
             className="overflow-hidden transition-all duration-700 ease-in-out"
           >
-            <Form className="flex max-w-xl flex-col p-2 justify-center">
+            <Form className="flex max-w-xl mb-4 flex-col p-2 justify-center">
               <label
                 htmlFor="passwordCurrent"
                 className="block text-sm font-medium leading-6 text-gray-900"
