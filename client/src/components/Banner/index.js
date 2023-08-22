@@ -1,7 +1,9 @@
 import Image from 'next/image'
+import { useRouter } from "next/router";
 import React from 'react'
 
 const index = () => {
+    const router = useRouter();
     return (
         <>
             <div className='xl:h-[1000px] text-white flex justify-center items-center overflow-hidden relative mb-8'>
@@ -23,8 +25,10 @@ const index = () => {
                                 <h3>Get Where You Need To Go, <span className='text-secondary'>Safely</span> And <span className='text-secondary'>Affordably</span></h3>
                             </div>
                             <div className='flex gap-4 pt-10'>
-                                <button className='text-xl font-semibold py-4 px-10 bg-transparent rounded-2xl transition duration-300 hover:bg-secondary border'>Apply To Drive</button>
-                                <button className='text-xl font-semibold py-4 px-10 bg-transparent rounded-2xl transition duration-300 hover:bg-primary border'>SignUp To Drive</button>
+                                <button className='text-xl font-semibold py-4 px-10 bg-transparent rounded-2xl transition duration-300 hover:bg-secondary border uppercase' onClick={()=> router.push('/login')} >Login</button>
+
+                                <button className='text-xl font-semibold py-4 px-10 bg-transparent rounded-2xl transition duration-300 hover:bg-secondary border uppercase' onClick={()=> router.push('/register')} >Register</button>
+                               
                             </div>
                         </div>
                     </div>
