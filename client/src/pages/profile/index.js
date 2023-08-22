@@ -8,6 +8,7 @@ import Box from "@mui/material/Box";
 import CardMedia from "@mui/material/CardMedia";
 import Image from "next/image";
 import Card from "@mui/material/Card";
+import * as Yup from "yup";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
@@ -103,6 +104,20 @@ const ChangePasswordForm = () => {
     setIsOpen((currState) => !currState);
   };
 
+  // Update Password Schema
+  const ChangePasswordSchema = Yup.object().shape({
+    passwordCurrent: Yup.string().required(
+      "You must enter your current password!"
+    ),
+    password: Yup.string().required("Please enter a new password!"),
+    passwordConfirm: Yup.string()
+      .required("You must confirm your password!")
+      .oneOf(
+        [Yup.ref("password")],
+        "Confirm password and password should match!"
+      ),
+  });
+
   // For getting and setting form height -> For animation while form showing and hiding
   const formRef = useRef(null);
   return (
@@ -130,12 +145,14 @@ const ChangePasswordForm = () => {
           />
         </svg>
       </div>
+      {/* Formik starts here */}
       <Formik
         initialValues={{
           passwordCurrent: "",
           password: "",
           passwordConfirm: "",
         }}
+        validationSchema={ChangePasswordSchema}
         onSubmit={(values) => {
           console.log(values);
         }}
@@ -158,6 +175,7 @@ const ChangePasswordForm = () => {
                 Current Password
               </label>
               <Field
+                type="password"
                 className="block mt-2  w-full rounded-md border-0 p-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-400 sm:text-sm sm:leading-6 outline-none"
                 placeholder="************"
                 name="passwordCurrent"
@@ -174,6 +192,7 @@ const ChangePasswordForm = () => {
                 Password
               </label>
               <Field
+                type="password"
                 className="block mt-2  w-full rounded-md border-0 p-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-400 sm:text-sm sm:leading-6 outline-none"
                 placeholder="************"
                 name="password"
@@ -185,11 +204,12 @@ const ChangePasswordForm = () => {
                 htmlFor="passwordConfirm"
                 className="block text-sm font-medium leading-6 text-gray-900 mt-2"
               >
-                passwordConfirm
+                Confirm Password
               </label>
               <Field
+                type="password"
                 className="block mt-2  w-full rounded-md border-0 p-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-400 sm:text-sm sm:leading-6 outline-none"
-                name="password"
+                name="passwordConfirm"
                 placeholder="************"
               />
               {errors.passwordConfirm && touched.passwordConfirm ? (
