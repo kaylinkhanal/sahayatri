@@ -16,6 +16,7 @@ const addVehicles = async (req, res) => {
 
 const getVehiclesByUserId = async (req, res) => {
   const data = await Vehicles.findOne({ user: req.params.userId });
+  console.log(data)
   res.json({ data });
 };
 

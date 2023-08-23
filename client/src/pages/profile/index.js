@@ -111,7 +111,7 @@ const ChangePasswordForm = () => {
   const userId = useSelector((state) => state.user.userDetails)?._id;
 
   const handleFormOpen = () => {
-    setIsOpen((currState) => !currState);
+    setIsOpen(!isOpen);
   };
 
   const handleChangePassword = async (values) => {
@@ -135,6 +135,7 @@ const ChangePasswordForm = () => {
       router.push("login");
       alert("Password changed successfully! Please login again!");
     } else {
+      alert(result.message)
       console.log(result.message);
     }
   };
