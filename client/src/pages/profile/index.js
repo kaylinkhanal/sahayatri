@@ -19,7 +19,6 @@ const VehicleForm = (props)=> {
   const {userDetails} = useSelector(state=>state.user)
   const [file,setFile] = useState(null)
   const handleAddVehicle = async(values) => {
-    debugger;
     var formData = new FormData();
     Object.entries(values).map((item)=>{
       formData.append(item[0], item[1]);
@@ -154,7 +153,7 @@ const index=()=> {
      <Image
         width={100}
         height={100}
-        src={'http://localhost:8000/products/'+userDetails._id}
+        src={'http://localhost:8000/vehicle-image/'+userDetails?._id}
         alt="Live from space album cover"
       />
    </CardContent>

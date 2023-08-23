@@ -25,7 +25,6 @@ export default function BasicModal(props) {
 
   return (
     <div>
-      <Button onClick={handleOpen}>Open modal</Button>
       <Modal
         open={props.editOpen}
         onClose={()=>props.setEditOpen(false)}

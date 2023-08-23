@@ -16,15 +16,18 @@ const addVehicles = async(req,res)=>{
     
  
 const getVehiclesByUserId  = async(req,res)=>{
+    console.log(req.params.userId)
    const data = await Vehicles.findOne({user: req.params.userId})
-    res.json({data})
+   console.log(data,"@@")
+ 
+   res.json({data})
     }
     
 
-    const getVehicleDetailsById  = async(req,res)=>{
-        const data = await Vehicles.findById(req.params.vehicleId)
-         res.json({data})
-         }
+    // const getVehicleDetailsById  = async(req,res)=>{
+    //     const data = await Vehicles.findById(req.params.vehicleId)
+    //      res.json({data})
+    //      }
     const getAllVehicles  = async(req,res)=>{
         const totalCount = await Vehicles.find().count()
         const skipCount = (req.query.page - 1) * req.query.limit
@@ -48,4 +51,4 @@ const getVehicleImageByVehicleId = async(req,res)=>{
 
      }
    
-     module.exports = {addVehicles,getVehiclesByUserId,getVehicleDetailsById,getVehicleImageByVehicleId,getAllVehicles}
+     module.exports = {addVehicles,getVehiclesByUserId,getVehicleImageByVehicleId,getAllVehicles}
