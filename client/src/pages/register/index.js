@@ -1,4 +1,6 @@
 import React, {useState} from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useRouter } from "next/router";
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
 import { Alert } from '@mui/material';
@@ -24,6 +26,7 @@ const SignupSchema = Yup.object().shape({
 
 export default function Register() {
 	const [responseMsg, setResponseMsg] = useState({ msgLabel: '', msgType:'' })
+    const router = useRouter();
 	const registerUser = async (values) => {
 		try {
 			const response = await fetch("http://localhost:8000/register", {
@@ -131,7 +134,9 @@ export default function Register() {
 							>
 								Sign Up
 							</button>
-							<p>Already have an account? <Link href="/">Sign In</Link></p>
+							<div className='text-sm text-gray-400 cursor-pointer hover:text-gray-900 text-center pt-4' onClick={() => router.push('./login')}>
+                                <p>Already have have an account? Sign In</p>
+                            </div>
 						</Form>
 					)}
 				</Formik>

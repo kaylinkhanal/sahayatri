@@ -6,7 +6,7 @@ const index = () => {
     const router = useRouter();
     return (
         <>
-            <div className='xl:h-[1000px] text-white flex justify-center items-center overflow-hidden relative mb-8'>
+            <div className='xl:h-[900px] text-white flex justify-center items-center overflow-hidden relative mb-8'>
                 <div className=' bg-primary h-full w-full mx-8 rounded-3xl relative overflow-hidden'>
                     <Image src='/banner.jpg' width={2000} height={500} alt='sahayatri banner' />
                     
@@ -33,12 +33,7 @@ const index = () => {
                         </div>
                     </div>
                 </div>
-
-
-
-
-
-            </div>
+                </div>
         </>
     )
 }

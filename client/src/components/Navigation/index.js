@@ -1,14 +1,15 @@
 import Link from 'next/link'
 import React from 'react'
+import Image from 'next/image'
 
 const index = () => {
   return (
     <>  
-        <div className='bg-white py-4'>
+        <div className='bg-white'>
             <div className='container mx-auto flex justify-between items-center'>
                 {/* ---------Logo Area-------- */}
                 <div className='text-primary text-4xl font-semibold'>
-                    <h3>SahaYatri Logo</h3>
+                   <Image src='/slogo.jpg' width={300} height={300} />
                 </div>
                 
                 {/* --------Navbar Area--------- */}
