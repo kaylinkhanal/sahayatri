@@ -1,6 +1,7 @@
 import React from "react";
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
+import Image from "next/image";
 import {setUserDetails} from '../../redux/reducerSlices/userSlice'
 import { useDispatch, useSelector } from "react-redux";
 const SignupSchema = Yup.object().shape({
@@ -35,7 +36,11 @@ export default function Login() {
 
 	return (
 		<div className="flex w-5/6  justify-center  m-auto mt-4">
+			
 			<div className="flex flex-col w-full sm:w-3/4 md:w-2/4  lg:w-2/4 xl:w-96  justify-center ">
+				<center>
+					<Image src={'/slogo.jpg'} width={150} height={150} alt="logo/"></Image> 
+        		</center>
 				<h1 className=" text-lg mt-4 w-full text-center md:text-2xl font-semibold">
 					Login
 				</h1>
