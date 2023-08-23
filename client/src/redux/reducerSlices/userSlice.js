@@ -3,7 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 export const initialState = {
   userDetails: {},
   isLoggedIn: false,
-  token: ''
+  token: "",
 };
 
 const UserSlice = createSlice({
@@ -11,20 +11,25 @@ const UserSlice = createSlice({
   initialState,
   reducers: {
     setUserDetails: (state, actions) => {
-
       return {
         ...state,
         token: actions.payload.token,
         isLoggedIn: actions.payload.success,
-        userDetails: actions.payload.userDetails
-      }
+        userDetails: actions.payload.userDetails,
+      };
+    },
+    updateUserDetails: (state, actions) => {
+      return {
+        ...state,
+        userDetails: actions.payload.userDetails,
+      };
     },
     handleLogout: (state, actions) => {
-      return initialState
+      return initialState;
     },
-  }
+  },
 });
 
-
-export const {setUserDetails,handleLogout} = UserSlice.actions;
+export const { setUserDetails, updateUserDetails, handleLogout } =
+  UserSlice.actions;
 export default UserSlice.reducer;
