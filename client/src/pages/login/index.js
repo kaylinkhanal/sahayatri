@@ -39,7 +39,7 @@ export default function Login() {
           msgLabel: "Login successful, Welcome!",
           msgType: "success",
         });
-        router.push("/profile");
+        router.push("/");
       } else {
         setResponseMsg({ msgLabel: result.msg, msgType: "error" });
       }
