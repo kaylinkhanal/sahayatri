@@ -48,4 +48,3 @@ jspm_packages
 /client/node_modules
 
 #Excluding build directory
-public/

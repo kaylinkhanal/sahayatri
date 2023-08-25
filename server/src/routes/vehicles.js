@@ -16,10 +16,10 @@ const storage = multer.diskStorage({
 router.post('/vehicles',upload.single('vehicleImage'), VehicleController.addVehicles)
 router.get('/vehicles',  VehicleController.getAllVehicles)
 // router.get('/vehicles/:vehicleId',  VehicleController.getVehicleDetailsById)
-router.get('/vehicle-image/:vehicleId',  VehicleController.getVehicleImageByVehicleId)
+// router.get('/vehicle-image/:vehicleId',  VehicleController.getVehicleImageByVehicleId)
 
 
-// router.get('/vehicle-image/:userId',  getVehicleImageByUserId)
+router.get('/vehicle-image/:userId',  VehicleController.getVehicleImageByUserId)
 
 
 router.get('/vehicles/:userId',  VehicleController.getVehiclesByUserId)

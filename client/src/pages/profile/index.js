@@ -111,7 +111,7 @@ const ChangePasswordForm = () => {
   const userId = useSelector((state) => state.user.userDetails)?._id;
 
   const handleFormOpen = () => {
-    setIsOpen(!isOpen);
+    setIsOpen((currState) => !currState);
   };
 
   const handleChangePassword = async (values) => {
@@ -226,7 +226,7 @@ const ChangePasswordForm = () => {
                 htmlFor="password"
                 className="block text-sm font-medium leading-6 text-gray-900 mt-2"
               >
-                Password
+               New Password
               </label>
               <Field
                 type="password"
@@ -241,7 +241,7 @@ const ChangePasswordForm = () => {
                 htmlFor="passwordConfirm"
                 className="block text-sm font-medium leading-6 text-gray-900 mt-2"
               >
-                Confirm Password
+               New Confirm Password
               </label>
               <Field
                 type="password"
@@ -337,7 +337,7 @@ const index = () => {
   }, []);
   return (
     <div className="p-4">
-      <CustomModal editOpen={editOpen} setEditOpen={setEditOpen} />
+      <CustomModal  userDetails={userDetails}  submitButtonText="Save" editOpen={editOpen} setEditOpen={setEditOpen} />
       <strong>User Details</strong>
       <div style={{ border: "1px solid", padding: "10px" }}>
         <Button variant="outlined" onClick={() => setEditOpen(true)}>
@@ -375,7 +375,7 @@ const index = () => {
                 <Image
                   width={100}
                   height={100}
-                  src={"http://localhost:8000/products/" + userDetails?._id}
+                  src={"http://localhost:8000/vehicle-image/" + userDetails?._id}
                   alt="Live from space album cover"
                 />
               </CardContent>
@@ -385,6 +385,7 @@ const index = () => {
           )}
 
           <Modal
+            submitButtonText="Save"
             open={open}
             onClose={handleClose}
             aria-labelledby="modal-modal-title"

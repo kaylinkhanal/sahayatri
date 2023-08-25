@@ -31,9 +31,9 @@ const getAllVehicles = async (req, res) => {
   res.json({ data, totalCount });
 };
 
-const getVehicleImageByVehicleId = async (req, res) => {
+const getVehicleImageByUserId = async (req, res) => {
   try {
-    const data = await Vehicles.findById(req.params.vehicleId);
+    const data = await Vehicles.findOne({user: req.params.userId});
     const vehicleImageDir = path.join(
       __dirname,
       "../../",
@@ -60,6 +60,6 @@ module.exports = {
   addVehicles,
   getVehiclesByUserId,
   getVehicleDetailsById,
-  getVehicleImageByVehicleId,
+  getVehicleImageByUserId,
   getAllVehicles,
 };

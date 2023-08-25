@@ -7,7 +7,7 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Avatar from '@mui/material/Avatar';
 import { useRouter } from 'next/router'
-
+import styles from '../../styles/userMenu.module.css'
 function UserMenu() {
   const router = useRouter()
   const {userDetails} = useSelector(state=>state.user)
@@ -23,7 +23,7 @@ function UserMenu() {
     setOpen(false)
   }
   return (
-    <div>
+    <div className={styles.userMenu}>
       <Avatar 
       onClick={()=> setOpen(true)}
       sx={{ bgcolor: deepOrange[500] }}>{displayName()}</Avatar>
@@ -36,7 +36,6 @@ function UserMenu() {
       >
           <MenuItem onClick={()=> router.push('/profile')}>Profile</MenuItem>
           <MenuItem onClick={handleClose}>Settings</MenuItem>
-          <MenuItem onClick={()=> router.push('/switch-role')}>Switch Role</MenuItem>
           <MenuItem onClick={()=>dispatch(handleLogout())}>Logout</MenuItem>
       </Menu>
       </div>

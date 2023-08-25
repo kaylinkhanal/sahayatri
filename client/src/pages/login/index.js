@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
 import Image from "next/image";
-import {setUserDetails} from '../../redux/reducerSlices/userSlice'
+import { setUserDetails } from "../../redux/reducerSlices/userSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
+import { Alert } from "@mui/material";
 const SignupSchema = Yup.object().shape({
   phoneNumber: Yup.string()
     .min(6, "Too Short!")
@@ -20,6 +21,7 @@ const SignupSchema = Yup.object().shape({
 export default function Login() {
   const dispatch = useDispatch();
   const router = useRouter();
+  const [responseMsg, setResponseMsg] = useState({ msgLabel: "", msgType: "" });
   const handleLogin = async (values) => {
     try {
       const response = await fetch("http://localhost:8000/login", {
@@ -30,15 +32,23 @@ export default function Login() {
         body: JSON.stringify(values),
       });
       const result = await response.json();
-      dispatch(setUserDetails(result));
-      console.log(result);
-      router.push("/");
+
+      if (result.success) {
+        dispatch(setUserDetails(result));
+        setResponseMsg({
+          msgLabel: "Login successful, Welcome!",
+          msgType: "success",
+        });
+        router.push("/");
+      } else {
+        setResponseMsg({ msgLabel: result.msg, msgType: "error" });
+      }
     } catch (error) {
+      setResponseMsg({ msgLabel: "error.msg", msgType: "error" });
       console.error("Error posting data:", error);
     }
   };
 
-<<<<<<< HEAD
   return (
     <div className="flex w-5/6  justify-center  m-auto mt-4">
       <div className="flex flex-col w-full sm:w-3/4 md:w-2/4  lg:w-2/4 xl:w-96  justify-center ">
@@ -58,6 +68,15 @@ export default function Login() {
         >
           {({ errors, touched }) => (
             <Form className="w-full flex flex-col justify-center mx-auto mt-10">
+              {responseMsg.msgType && (
+                <Alert
+                  severity={responseMsg.msgType}
+                  onClose={() => setResponseMsg({ msgLabel: "", msgType: "" })}
+                >
+                  {" "}
+                  {responseMsg.msgLabel}{" "}
+                </Alert>
+              )}
               <label
                 htmlFor="phoneNumber"
                 className="block text-sm font-medium leading-6 text-gray-900 mt-5"
@@ -71,44 +90,6 @@ export default function Login() {
               {errors.phoneNumber && touched.phoneNumber ? (
                 <div className="text-red-500">{errors.phoneNumber}</div>
               ) : null}
-=======
-	return (
-		<div className="flex w-5/6  justify-center  m-auto mt-4">
-			
-			<div className="flex flex-col w-full sm:w-3/4 md:w-2/4  lg:w-2/4 xl:w-96  justify-center ">
-				<center>
-					<Image src={'/slogo.jpg'} width={150} height={150} alt="logo/"></Image> 
-        		</center>
-				<h1 className=" text-lg mt-4 w-full text-center md:text-2xl font-semibold">
-					Login
-				</h1>
-				<Formik
-					initialValues={{
-						phoneNumber: "",
-						password: "",
-					}}
-					validationSchema={SignupSchema}
-					onSubmit={(values) => {
-						// same shape as initial values
-						handleLogin(values);
-					}}
-				>
-					{({ errors, touched }) => (
-						<Form className="w-full flex flex-col justify-center mx-auto mt-10">
-							<label
-								htmlFor="phoneNumber"
-								className="block text-sm font-medium leading-6 text-gray-900 mt-5"
-							>
-								Phone Number
-							</label>
-							<Field
-								className="block mt-2  w-full rounded-md border-0 p-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-400 sm:text-sm sm:leading-6 outline-none"
-								name="phoneNumber"
-							/>
-							{errors.phoneNumber && touched.phoneNumber ? (
-								<div className="text-red-500">{errors.phoneNumber}</div>
-							) : null}
->>>>>>> 4d60844d6b52f3ee4f8b19e660cb4c2745cba3f3
 
               <label
                 htmlFor="password"
@@ -131,6 +112,13 @@ export default function Login() {
               >
                 Log In
               </button>
+
+              <div
+                className="text-sm text-gray-400 cursor-pointer hover:text-gray-900 text-center pt-4"
+                onClick={() => router.push("./register")}
+              >
+                <p>Don't have have an account? Sign Up</p>
+              </div>
             </Form>
           )}
         </Formik>
