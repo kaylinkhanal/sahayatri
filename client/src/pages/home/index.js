@@ -4,6 +4,8 @@ import { GoogleMap, useJsApiLoader,MarkerF } from '@react-google-maps/api'
 import styles from '../../styles/userMenu.module.css'
 import CheckIcon from '@mui/icons-material/Check';
 import MapSearch from '../../components/MapSearch'
+import { DotWave } from '@uiball/loaders'
+
 function index() {
   const [searchStep, setSearchStep] = useState(1)
   const { isLoaded, loadError } = useJsApiLoader({
@@ -40,7 +42,6 @@ function index() {
     width: '100vw'
   }
 
-  
   if(isLoaded){
     return (
         <GoogleMap
@@ -79,7 +80,12 @@ function index() {
 
     )
   }
- return "LOADING..."
+
+ return (
+  <div className='flex justify-center items-center h-screen'>
+    <DotWave size={70} speed={1} color="#2563eb" />
+  </div>
+ )
 }
 
 export default index
