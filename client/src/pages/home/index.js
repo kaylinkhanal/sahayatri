@@ -29,6 +29,31 @@ function index() {
 		lat: 27.702348,
 		lng: 85.307631,
 	});
+	const [destCenter, setDestCenter] = useState({
+		lat: 27.702348,
+		lng: 85.307631,
+	});
+
+	const [flag, setFlag] = useState(true);
+
+	const handleMarker = (e) => {
+		const newPosition = {
+			lat: e.latLng.lat(),
+			lng: e.latLng.lng(),
+		};
+		setCenter(newPosition);
+		setFlag(true);
+		console.log("Marker dragged to:", newPosition);
+	};
+	const handleSecondMarker = (e) => {
+		const newPosition = {
+			lat: e.latLng.lat(),
+			lng: e.latLng.lng(),
+		};
+		setDestCenter(newPosition);
+		setFlag(false);
+		console.log("Marker dragged to:", newPosition);
+	};
 	// useEffect(() => {
 	//   navigator.geolocation.getCurrentPosition((pos)=> {
 	//     const {latitude, longitude} = pos.coords
@@ -44,18 +69,20 @@ function index() {
 		return (
 			<GoogleMap
 				mapContainerStyle={mapContainerStyle}
-				center={center}
+				center={flag ? center : destCenter}
 				zoom={13}
 			>
 				<MarkerF
 					onLoad={() => console.log("loaded")}
 					position={center}
 					draggable={true}
+					onDragEnd={handleMarker}
 				/>
 				<MarkerF
 					onLoad={() => console.log("loaded")}
-					position={center}
+					position={destCenter}
 					draggable={true}
+					onDragEnd={handleSecondMarker}
 				/>
 				<div className={styles.map}>
 					{searchStep === 1 && (
