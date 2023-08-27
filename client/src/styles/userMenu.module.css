@@ -3,3 +3,27 @@
     margin: 30px;
     right: 0;
 }
+
+
+.searchBox {
+    /* padding: 96px; */
+    /* background-color: #fafaf8; */
+    position: absolute;
+    margin: 10px;
+    left: 200px;
+    width: 30%;
+    height: 30%;
+    /* top: 54px; */
+    border-radius: 5px;
+}
+
+.map{
+    /* padding: 96px; */
+    /* background-color: #fafaf8; */
+    position: absolute;
+    margin: 10px;
+    width: 30%;
+    height: 30%;
+    top: 54px;
+    border-radius: 5px;
+}
