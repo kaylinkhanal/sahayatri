@@ -52,11 +52,20 @@ function index() {
       onLoad={()=> console.log("loaded")}
       position={center}
       draggable={true}
+      icon={{
+        // path: google.maps.SymbolPath.CIRCLE,
+        
+        url:'/pickuplocation.png'
+      }}
     />
      <MarkerF
       onLoad={()=> console.log("loaded")}
       position={center}
       draggable={true}
+      icon={{
+        // path: google.maps.SymbolPath.CIRCLE,
+        url:'/droplocation.png'   
+      }}
     />
     <div className={styles.map}>
      {searchStep === 1 && <><MapSearch showCurrentIcon={true} placeholder="Pickup Address"/><CheckIcon onClick={()=>setSearchStep(2)}/></>} 
