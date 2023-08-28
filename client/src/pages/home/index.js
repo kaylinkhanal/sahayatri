@@ -7,30 +7,30 @@ import MapSearch from '../../components/MapSearch'
 import { DotWave } from '@uiball/loaders'
 
 function index() {
-  const [searchStep, setSearchStep] = useState(1)
+  const [searchStep, setSearchStep] = useState(1);
   const { isLoaded, loadError } = useJsApiLoader({
     googleMapsApiKey: "AIzaSyDLfjmFgDEt9_G2LXVyP61MZtVHE2M3H-0", // ,
-    libraries:["places"]
+    libraries: ["places"],
     // ...otherOptions
-  })
+  });
 
   const options = {
-    strokeColor: '#FF0000',
+    strokeColor: "#FF0000",
     strokeOpacity: 0.8,
     strokeWeight: 2,
-    fillColor: '#FF0000',
+    fillColor: "#FF0000",
     fillOpacity: 0.35,
     clickable: false,
     draggable: false,
     editable: false,
     visible: true,
     radius: 30000,
-    zIndex: 1
-  }
+    zIndex: 1,
+  };
   const [center, setCenter] = useState({
     lat: 27.702348,
-    lng: 85.307631
-  })
+    lng: 85.307631,
+  });
   // useEffect(() => {
   //   navigator.geolocation.getCurrentPosition((pos)=> {
   //     const {latitude, longitude} = pos.coords
@@ -38,14 +38,14 @@ function index() {
   //   });
   // }, [])
   const mapContainerStyle = {
-    height: '100vh',
-    width: '100vw'
-  }
+    height: "100vh",
+    width: "100vw",
+  };
 
-  if(isLoaded){
+  if (isLoaded) {
     return (
-        <GoogleMap
-        mapContainerStyle= {mapContainerStyle}
+      <GoogleMap
+        mapContainerStyle={mapContainerStyle}
         center={center}
           zoom={13}
     >
@@ -59,15 +59,12 @@ function index() {
         url:'/pickuplocation.png'
       }}
     />
-     <MarkerF
-      onLoad={()=> console.log("loaded")}
-      position={center}
-      draggable={true}
-      icon={{
-        // path: google.maps.SymbolPath.CIRCLE,
-        url:'/droplocation.png'   
-      }}
-    />
+        <MarkerF
+          onLoad={() => console.log("loaded")}
+          icon={"/destination-marker.svg"}
+          position={center}
+          draggable={true}
+        />
     <div className={styles.map}>
      {searchStep === 1 && <><MapSearch showCurrentIcon={true} placeholder="Pickup Address"/><CheckIcon onClick={()=>setSearchStep(2)}/></>} 
     { searchStep=== 2 &&  <><MapSearch showCurrentIcon={false} placeholder="Destination Address"/><CheckIcon onClick={()=>setSearchStep(2)}/></>}
@@ -76,9 +73,8 @@ function index() {
     {/* <div className={styles.map}>
 
     </div> */}
-    </GoogleMap>
-
-    )
+      </GoogleMap>
+    );
   }
 
  return (
@@ -88,4 +84,4 @@ function index() {
  )
 }
 
-export default index
+export default index;
