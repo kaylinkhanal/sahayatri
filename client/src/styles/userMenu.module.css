@@ -1,29 +1,42 @@
-.userMenu{
-    position: absolute;
-    margin: 30px;
-    right: 0;
+.userMenu {
+	position: absolute;
+	margin: 30px;
+	right: 0;
 }
-
 
 .searchBox {
-    /* padding: 96px; */
-    /* background-color: #fafaf8; */
-    position: absolute;
-    margin: 10px;
-    left: 200px;
-    width: 30%;
-    height: 30%;
-    /* top: 54px; */
-    border-radius: 5px;
+	/* padding: 96px; */
+	/* background-color: #fafaf8; */
+	position: absolute;
+	margin: 10px;
+	left: 200px;
+	width: 30%;
+	height: 30%;
+	/* top: 54px; */
+	border-radius: 5px;
 }
 
-.map{
-    /* padding: 96px; */
-    /* background-color: #fafaf8; */
-    position: absolute;
-    margin: 10px;
-    width: 30%;
-    height: 30%;
-    top: 54px;
-    border-radius: 5px;
+.map {
+	/* padding: 96px; */
+	/* background-color: #fafaf8; */
+	position: absolute;
+	margin: 10px;
+	width: 25%;
+
+	top: 54px;
+	border-radius: 5px;
+}
+
+.custom {
+	color: white;
+	border-radius: 10%;
+
+	cursor: pointer;
+
+	vertical-align: middle;
+	background-color: #3a485e;
+}
+
+.custom:hover {
+	background-color: #617fb0;
 }
