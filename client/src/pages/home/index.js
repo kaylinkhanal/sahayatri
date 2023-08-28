@@ -5,7 +5,7 @@ import styles from '../../styles/userMenu.module.css'
 import CheckIcon from '@mui/icons-material/Check';
 import MapSearch from '../../components/MapSearch'
 import { DotWave } from '@uiball/loaders'
-
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 function index() {
   const [searchStep, setSearchStep] = useState(1);
   const { isLoaded, loadError } = useJsApiLoader({
@@ -65,11 +65,30 @@ function index() {
           position={center}
           draggable={true}
         />
-    <div className={styles.map}>
-     {searchStep === 1 && <><MapSearch showCurrentIcon={true} placeholder="Pickup Address"/><CheckIcon onClick={()=>setSearchStep(2)}/></>} 
-    { searchStep=== 2 &&  <><MapSearch showCurrentIcon={false} placeholder="Destination Address"/><CheckIcon onClick={()=>setSearchStep(2)}/></>}
-    </div>
-   
+ 		<div className={styles.map}>
+					{searchStep === 1 && (
+						<div className="flex items-center gap-1">
+							<MapSearch showCurrentIcon={true} placeholder="Pickup Address" />
+
+							<CheckIcon
+								className={styles.custom}
+								onClick={() => setSearchStep(2)}
+							/>
+						</div>
+					)}
+					{searchStep === 2 && (
+						<div className="flex items-center gap-1">
+							<MapSearch
+								showCurrentIcon={false}
+								placeholder="Destination Address"
+							/>
+							<ArrowBackIcon
+								className={styles.custom}
+								onClick={() => setSearchStep(1)}
+							/>
+						</div>
+					)}
+				</div>
     {/* <div className={styles.map}>
 
     </div> */}
