@@ -1,9 +1,11 @@
-import UserMenu from "@/components/UserMenu";
-import React, { useEffect, useState } from "react";
-import { GoogleMap, useJsApiLoader, MarkerF } from "@react-google-maps/api";
-import styles from "../../styles/userMenu.module.css";
-import CheckIcon from "@mui/icons-material/Check";
-import MapSearch from "../../components/MapSearch";
+import UserMenu from '@/components/UserMenu'
+import React, {useEffect, useState} from 'react'
+import { GoogleMap, useJsApiLoader,MarkerF } from '@react-google-maps/api'
+import styles from '../../styles/userMenu.module.css'
+import CheckIcon from '@mui/icons-material/Check';
+import MapSearch from '../../components/MapSearch'
+import { DotWave } from '@uiball/loaders'
+
 function index() {
   const [searchStep, setSearchStep] = useState(1);
   const { isLoaded, loadError } = useJsApiLoader({
@@ -45,45 +47,41 @@ function index() {
       <GoogleMap
         mapContainerStyle={mapContainerStyle}
         center={center}
-        zoom={13}
-      >
-         <MarkerF
-          onLoad={()=> console.log("loaded")}
-          position={center}
-          draggable={true}
-          icon={{
-            url:'/pickuplocation.png'   
-          }}/>
+          zoom={13}
+    >
+      <MarkerF
+      onLoad={()=> console.log("loaded")}
+      position={center}
+      draggable={true}
+      icon={{
+        // path: google.maps.SymbolPath.CIRCLE,
+        
+        url:'/pickuplocation.png'
+      }}
+    />
         <MarkerF
           onLoad={() => console.log("loaded")}
           icon={"/destination-marker.svg"}
           position={center}
           draggable={true}
         />
-        <div className={styles.map}>
-          {searchStep === 1 && (
-            <>
-              <MapSearch showCurrentIcon={true} placeholder="Pickup Address" />
-              <CheckIcon onClick={() => setSearchStep(2)} />
-            </>
-          )}
-          {searchStep === 2 && (
-            <>
-              <MapSearch
-                showCurrentIcon={false}
-                placeholder="Destination Address"
-              />
-              <CheckIcon onClick={() => setSearchStep(2)} />
-            </>
-          )}
-        </div>
-        {/* <div className={styles.map}>
+    <div className={styles.map}>
+     {searchStep === 1 && <><MapSearch showCurrentIcon={true} placeholder="Pickup Address"/><CheckIcon onClick={()=>setSearchStep(2)}/></>} 
+    { searchStep=== 2 &&  <><MapSearch showCurrentIcon={false} placeholder="Destination Address"/><CheckIcon onClick={()=>setSearchStep(2)}/></>}
+    </div>
+   
+    {/* <div className={styles.map}>
 
     </div> */}
       </GoogleMap>
     );
   }
-  return "LOADING...";
+
+ return (
+  <div className='flex justify-center items-center h-screen'>
+    <DotWave size={70} speed={1} color="#2563eb" />
+  </div>
+ )
 }
 
 export default index;
