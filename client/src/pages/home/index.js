@@ -47,12 +47,13 @@ function index() {
         center={center}
         zoom={13}
       >
-        <MarkerF
-          onLoad={() => console.log("loaded")}
-          icon={"/home-marker.svg"}
+         <MarkerF
+          onLoad={()=> console.log("loaded")}
           position={center}
           draggable={true}
-        />
+          icon={{
+            url:'/pickuplocation.png'   
+          }}/>
         <MarkerF
           onLoad={() => console.log("loaded")}
           icon={"/destination-marker.svg"}
