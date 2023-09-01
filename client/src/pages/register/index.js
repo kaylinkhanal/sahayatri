@@ -42,6 +42,10 @@ export default function Register() {
           msgLabel: result.msg,
           msgType: response.status == 409 ? "error" : "success",
         });
+        if(response.status == 201){
+          // after registration successful navigate to login route
+          router.push('/login')
+        }
       }
     } catch (error) {
       setResponseMsg({ msgLabel: "Something went wrong", msgType: "error" });
