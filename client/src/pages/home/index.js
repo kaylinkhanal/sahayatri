@@ -65,7 +65,7 @@ function index() {
           position={center}
           draggable={true}
         />
- 		<div className={styles.map}>
+ 		    <div className={styles.map}>
 					{searchStep === 1 && (
 						<div className="flex items-center gap-1">
 							<MapSearch showCurrentIcon={true} placeholder="Pickup Address" />
@@ -89,9 +89,10 @@ function index() {
 						</div>
 					)}
 				</div>
-    {/* <div className={styles.map}>
-
-    </div> */}
+      <div className={styles.map}>
+        <UserMenu />
+      </div>
+    
       </GoogleMap>
     );
   }

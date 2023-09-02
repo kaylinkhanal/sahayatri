@@ -1,18 +1,26 @@
 .userMenu {
-	position: absolute;
-	margin: 30px;
-	right: 0;
+	display: flex;
+  	justify-content: end;
+	position: fixed;
+	top: 2px; 
+	right: 50px; 
+	margin: 10px;
 }
-
+.dropDown{
+	position: absolute;
+	top: calc(100% + 10px); /* Position below userMenu */
+	right: 50px; /* Adjust as needed to align with userMenu */
+	z-index: 100; /* Ensure it's on top of other content */ 
+}
 .searchBox {
 	/* padding: 96px; */
 	/* background-color: #fafaf8; */
-	position: absolute;
+	position: fixed;
 	margin: 10px;
 	left: 200px;
 	width: 30%;
 	height: 30%;
-	/* top: 54px; */
+		/* top: 54px; */
 	border-radius: 5px;
 }
 
@@ -22,7 +30,6 @@
 	position: absolute;
 	margin: 10px;
 	width: 25%;
-
 	top: 54px;
 	border-radius: 5px;
 }
