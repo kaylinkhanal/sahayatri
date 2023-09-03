@@ -10,7 +10,14 @@ const SignupSchema = Yup.object().shape({
   phoneNumber: Yup.string()
     .min(6, "Too Short!")
     .max(15, "Too Long!")
-    .required("Required"),
+    .required("Required")
+    .test((num)=>{
+      if(isNaN(parseInt(num))){
+        return false
+      }
+      return true
+    })
+    ,
 
   password: Yup.string()
     .min(2, "Too Short!")
@@ -53,7 +60,7 @@ export default function Login() {
         setResponseMsg({ msgLabel: result.msg, msgType: "error" });
       }
     } catch (error) {
-      setResponseMsg({ msgLabel: "error.msg", msgType: "error" });
+      setResponseMsg({ msgLabel: error.msg, msgType: "error" });
       console.error("Error posting data:", error);
     }
   };
