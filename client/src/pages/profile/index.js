@@ -14,6 +14,12 @@ import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import Switch from "@mui/material/Switch";
 import Chip from "@mui/material/Chip";
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+
 
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import {
@@ -25,6 +31,7 @@ import { useRouter } from "next/router";
 const label = { inputProps: { "aria-label": "Switch demo" } };
 
 const VehicleForm = (props) => {
+
   const { userDetails } = useSelector((state) => state.user);
   const userId = useSelector((state) => state.user.userDetails)?._id;
   const [file, setFile] = useState(null);
@@ -356,6 +363,22 @@ const index = () => {
       router.reload();
     }
   };
+  const [openConfirmDialog, setOpenConfirmDialog] = React.useState(false);
+  const handleClickOpen = () => {
+    setOpenConfirmDialog(true);
+  };
+
+  const handleCloseConfirmDialog = () => {
+    setOpenConfirmDialog(false);
+  };
+
+  const deleteConfirmed = ()=>{
+    console.log('delete')
+    handleDelete()
+    setOpenConfirmDialog(false);
+
+
+  }
 
   return (
     <div className="p-4">
@@ -376,6 +399,26 @@ const index = () => {
 
         <ChangePasswordForm />
       </div>
+       <div>
+   
+      <Dialog
+        open={openConfirmDialog}
+        onClose={handleCloseConfirmDialog}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">
+          {"Delete Vehicle Are You Sure?"}
+        </DialogTitle>
+       
+        <DialogActions>
+          <Button onClick={handleCloseConfirmDialog}>No</Button>
+          <Button onClick={deleteConfirmed} autoFocus>
+            Yes
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </div>
       <strong>Rider mode</strong>
       {/* Should be checked in the user role is rider else it shouldn't be checked */}
       <Switch checked={role === "rider"} onChange={handleChange} {...label} />
@@ -399,9 +442,11 @@ const index = () => {
                   </Typography>
 
                   <Chip
-                    label="Delete user"
+                    label="Delete Vehicle"
                     // onClick={handleClick}
-                    onClick={handleDelete}
+                    // onClick={handleDelete}
+                    onClick={handleClickOpen}
+
                     deleteIcon={
                       <DeleteForeverIcon className="text-red-500 cursor-pointer" />
                     }
