@@ -12,12 +12,15 @@ const LocationSlice = createSlice({
   name: "location",
   initialState,
   reducers: {
-    setPickupAddress: (state, actions) => {
-     
+    setAddress: (state, actions) => {
+      state[actions.payload.locType] = actions.payload.addr
+    },
+    setCoords: (state, actions) => {
+      state[actions.payload.cordType] = actions.payload.currentLocation
     },
   }
 });
 
 
-export const {setUserDetails} = UserSlice.actions;
-export default UserSlice.reducer;
+export const {setAddress,setCoords } = LocationSlice.actions;
+export default LocationSlice.reducer;
