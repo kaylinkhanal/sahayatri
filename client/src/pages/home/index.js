@@ -115,8 +115,7 @@ const setCurrentPickUpLoc= ()=>{
           onDragEnd= {(e)=>handleDrag(e, 'destinationAddress')}
           draggable={true}
         />}
-       
- 		<div className={styles.map}>
+ 		    <div className={styles.map}>
 					{searchStep === 1 && (
 						<div className="flex items-center gap-1">
               <MapSearch 
