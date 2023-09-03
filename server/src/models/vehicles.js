@@ -4,7 +4,7 @@ const VehicleSchema = new mongoose.Schema({
     vehicleImage: String,
     vehicleCategory: {
       type: String,   
-      enum: ['Scooter', 'Bike', 'Car'],
+      // enum: ['Scooter', 'Bike', 'Car'],
       default: 'Bike'
       },
     user:  String
@@ -12,3 +12,5 @@ const VehicleSchema = new mongoose.Schema({
   
   const Vehicles = mongoose.model('Vehicles',VehicleSchema);
   module.exports = Vehicles
+
+  
