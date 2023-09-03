@@ -36,6 +36,22 @@ function index() {
     lat: 27.702348,
     lng: 85.307631,
   });
+
+  // Just playing around with static data
+  const dest = {
+    lat: 26.4175616,
+    lng: 87.2677376,
+  };
+
+  // Finding averages
+  const centerLat = (center.lat + dest.lat) / 2;
+  const centerLng = (center.lng + dest.lng) / 2;
+
+  const centerLatLng = {
+    lat: centerLat,
+    lng: centerLng,
+  };
+
   // useEffect(() => {
 
   // }, [])
@@ -139,11 +155,11 @@ const setCurrentPickUpLoc= ()=>{
     );
   }
 
- return (
-  <div className='flex justify-center items-center h-screen'>
-    <DotWave size={70} speed={1} color="#2563eb" />
-  </div>
- )
+  return (
+    <div className="flex justify-center items-center h-screen">
+      <DotWave size={70} speed={1} color="#2563eb" />
+    </div>
+  );
 }
 
 export default index;

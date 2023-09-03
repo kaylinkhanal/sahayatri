@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
 import Image from "next/image";
@@ -29,6 +29,15 @@ export default function Login() {
   const dispatch = useDispatch();
   const router = useRouter();
   const [responseMsg, setResponseMsg] = useState({ msgLabel: "", msgType: "" });
+
+  // Ref that hooks phone input to be focused on initial render
+  const phoneInputRef = useRef(null);
+
+  // Focus phone Input in first mount
+  useEffect(() => {
+    phoneInputRef.current.focus();
+  }, []);
+
   const handleLogin = async (values) => {
     try {
       const response = await fetch("http://localhost:8000/login", {
@@ -91,6 +100,7 @@ export default function Login() {
                 Phone Number
               </label>
               <Field
+                innerRef={phoneInputRef}
                 className="block mt-2  w-full rounded-md border-0 p-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-400 sm:text-sm sm:leading-6 outline-none"
                 name="phoneNumber"
               />

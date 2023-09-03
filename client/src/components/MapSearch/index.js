@@ -26,6 +26,7 @@ const handlePlaceChange = ()=> {
 					<InputBase
 						ref={inputRef}
 						sx={{ ml: 1, flex: 1 }}
+						value={props.searchStep == 1 ?  pickUpAddress : destinationAddress }
 						placeholder={props.placeholder}
 						onChange={(e)=> dispatch(setAddress({addr: e.target.value, locType:props.searchStep == 1 ? 'pickUpAddress': 'destinationAddress'}))}
 						inputProps={{ "aria-label": "Pickup Address" }}
