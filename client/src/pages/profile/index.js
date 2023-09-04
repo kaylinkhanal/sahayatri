@@ -13,6 +13,15 @@ import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import Switch from "@mui/material/Switch";
+import Chip from "@mui/material/Chip";
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+
+
+import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import {
   handleLogout,
   updateUserDetails,
@@ -22,7 +31,9 @@ import { useRouter } from "next/router";
 const label = { inputProps: { "aria-label": "Switch demo" } };
 
 const VehicleForm = (props) => {
+
   const { userDetails } = useSelector((state) => state.user);
+  const userId = useSelector((state) => state.user.userDetails)?._id;
   const [file, setFile] = useState(null);
   const handleAddVehicle = async (values) => {
     var formData = new FormData();
@@ -42,6 +53,7 @@ const VehicleForm = (props) => {
       props.fetchVehicleDetails();
     }
   };
+
   return (
     <div>
       <Formik
@@ -135,7 +147,7 @@ const ChangePasswordForm = () => {
       router.push("login");
       alert("Password changed successfully! Please login again!");
     } else {
-      alert(result.message)
+      alert(result.message);
       console.log(result.message);
     }
   };
@@ -226,7 +238,7 @@ const ChangePasswordForm = () => {
                 htmlFor="password"
                 className="block text-sm font-medium leading-6 text-gray-900 mt-2"
               >
-               New Password
+                New Password
               </label>
               <Field
                 type="password"
@@ -241,7 +253,7 @@ const ChangePasswordForm = () => {
                 htmlFor="passwordConfirm"
                 className="block text-sm font-medium leading-6 text-gray-900 mt-2"
               >
-               New Confirm Password
+                New Confirm Password
               </label>
               <Field
                 type="password"
@@ -286,6 +298,7 @@ const index = () => {
 
   // dispatcher
   const dispatch = useDispatch();
+  const router = useRouter();
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -335,9 +348,46 @@ const index = () => {
   useEffect(() => {
     fetchVehicleDetails();
   }, []);
+
+  const handleDelete = async () => {
+
+    const response = await fetch(
+      `http://localhost:8000/vehicles/${userDetails._id}`,
+      {
+        method: "DELETE",
+      }
+    );
+    console.log(userDetails._id);
+    const result = await response.json();
+    if ((result.status = "200")) {
+      fetchVehicleDetails();
+    }
+  };
+  const [openConfirmDialog, setOpenConfirmDialog] = React.useState(false);
+  const handleClickOpen = () => {
+    setOpenConfirmDialog(true);
+  };
+
+  const handleCloseConfirmDialog = () => {
+    setOpenConfirmDialog(false);
+  };
+
+  const deleteConfirmed = ()=>{
+    console.log('delete')
+    handleDelete()
+    setOpenConfirmDialog(false);
+
+
+  }
+
   return (
     <div className="p-4">
-      <CustomModal  userDetails={userDetails}  submitButtonText="Save" editOpen={editOpen} setEditOpen={setEditOpen} />
+      <CustomModal
+        userDetails={userDetails}
+        submitButtonText="Save"
+        editOpen={editOpen}
+        setEditOpen={setEditOpen}
+      />
       <strong>User Details</strong>
       <div style={{ border: "1px solid", padding: "10px" }}>
         <Button variant="outlined" onClick={() => setEditOpen(true)}>
@@ -349,6 +399,26 @@ const index = () => {
 
         <ChangePasswordForm />
       </div>
+       <div>
+   
+      <Dialog
+        open={openConfirmDialog}
+        onClose={handleCloseConfirmDialog}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">
+          {"Delete Vehicle Are You Sure?"}
+        </DialogTitle>
+       
+        <DialogActions>
+          <Button onClick={handleCloseConfirmDialog}>No</Button>
+          <Button onClick={deleteConfirmed} autoFocus>
+            Yes
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </div>
       <strong>Rider mode</strong>
       {/* Should be checked in the user role is rider else it shouldn't be checked */}
       <Switch checked={role === "rider"} onChange={handleChange} {...label} />
@@ -364,10 +434,30 @@ const index = () => {
                 >
                   1
                 </Typography>
-                <Typography variant="h5" component="div">
-                  <strong>Vehcile Number:</strong>{" "}
-                  {vehicleDetails?.vehicleNumber}
-                </Typography>
+
+                <div className="flex flex-row gap-8 items-center text-2xl">
+                  <Typography variant="h5" component="div">
+                    <strong>Vehcile Number:</strong>{" "}
+                    {vehicleDetails?.vehicleNumber}
+                  </Typography>
+
+                  <Chip
+                    label="Delete Vehicle"
+                    // onClick={handleClick}
+                    // onClick={handleDelete}
+                    onClick={handleClickOpen}
+
+                    deleteIcon={
+                      <DeleteForeverIcon className="text-red-500 cursor-pointer" />
+                    }
+                    variant="outlined"
+                  />
+                  {/* <DeleteForeverIcon
+                    className="text-red-500 cursor-pointer"
+                    // onClick={deleteVehicle}
+                    onClick={handleOpen}
+                  /> */}
+                </div>
                 <Typography sx={{ mb: 1.5 }} color="text.secondary">
                   <strong>Vehcile Category:</strong>{" "}
                   {vehicleDetails?.vehicleCategory}
@@ -375,7 +465,9 @@ const index = () => {
                 <Image
                   width={100}
                   height={100}
-                  src={"http://localhost:8000/vehicle-image/" + userDetails?._id}
+                  src={
+                    "http://localhost:8000/vehicle-image/" + userDetails?._id
+                  }
                   alt="Live from space album cover"
                 />
               </CardContent>

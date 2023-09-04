@@ -16,8 +16,31 @@ const addVehicles = async (req, res) => {
 
 const getVehiclesByUserId = async (req, res) => {
   const data = await Vehicles.findOne({ user: req.params.userId });
-  console.log(data)
+  console.log(data);
   res.json({ data });
+};
+
+const deleteVehiclesByUserId = async (req, res) => {
+  try {
+    const vehicle = await Vehicles.findOne({ user: req.params.userId });
+
+    if (!vehicle) {
+      return res.status(404).json({ msg: "Vehicle not found" });
+    }
+    const vehicleImageDir = path.join(
+      __dirname,
+      "../../",
+      "uploads/vehicles/",
+      vehicle.vehicleImage
+    );
+    fs.unlinkSync( vehicleImageDir )
+    await Vehicles.findByIdAndDelete(vehicle._id);
+// delete from filesystem
+    res.json({ status: 200, msg: "Vehicle deleted" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ msg: "Internal server error" });
+  }
 };
 
 const getVehicleDetailsById = async (req, res) => {
@@ -33,7 +56,7 @@ const getAllVehicles = async (req, res) => {
 
 const getVehicleImageByUserId = async (req, res) => {
   try {
-    const data = await Vehicles.findOne({user: req.params.userId});
+    const data = await Vehicles.findOne({ user: req.params.userId });
     const vehicleImageDir = path.join(
       __dirname,
       "../../",
@@ -62,4 +85,5 @@ module.exports = {
   getVehicleDetailsById,
   getVehicleImageByUserId,
   getAllVehicles,
+  deleteVehiclesByUserId,
 };
