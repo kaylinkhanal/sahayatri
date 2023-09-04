@@ -14,7 +14,8 @@ function index(props) {
 	const dispatch = useDispatch()
 const {destinationAddress, pickUpAddress} = useSelector(state=>state.location)
 const handlePlaceChange = ()=> {
-	console.log(inputRef.current.children[0].value)
+	dispatch(setAddress({addr: inputRef.current.children[0].value, locType:props.searchStep == 1 ? 'pickUpAddress': 'destinationAddress'}))
+
 }
 	return (
 		<div style={{ marginBottom: "7px" }}>

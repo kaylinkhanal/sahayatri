@@ -57,12 +57,16 @@ function index() {
   // }, [])
 
 const setCurrentPickUpLoc= ()=>{
-  navigator.geolocation.getCurrentPosition((pos)=> {
-    const {latitude, longitude} = pos.coords
-    const currentLocation = {lat:latitude, lng:longitude}
-    setCenter(currentLocation)
-      dispatch(setCoords({currentLocation, cordType: 'pickCords'}))
-  });
+  if(navigator.geolocation){
+    navigator?.geolocation?.getCurrentPosition((pos)=> {
+      const {latitude, longitude} = pos.coords
+      const currentLocation = {lat:latitude, lng:longitude}
+      setCenter(currentLocation)
+        dispatch(setCoords({currentLocation, cordType: 'pickCords'}))
+    });
+  }
+  console.log(navigator)
+
 }
 
 
@@ -81,7 +85,7 @@ const setCurrentPickUpLoc= ()=>{
     const res =await fetch(`https://api.geoapify.com/v1/geocode/reverse?lat=${currentLocation.lat}&lon=${currentLocation.lng}&apiKey=a1dd45a7dfc54f55a44b69d125722fcb`)
     const data = await res.json()
     if(data) { 
-    const addr = data.features[0].properties.formatted
+    const addr = data?.features[0]?.properties?.formatted
     dispatch(setCoords({currentLocation, cordType: locType=='pickUpAddress' ? 'pickCords': 'destinationCords'}))
     dispatch(setAddress({addr, locType}))
 
