@@ -27,9 +27,15 @@ const deleteVehiclesByUserId = async (req, res) => {
     if (!vehicle) {
       return res.status(404).json({ msg: "Vehicle not found" });
     }
-
+    const vehicleImageDir = path.join(
+      __dirname,
+      "../../",
+      "uploads/vehicles/",
+      vehicle.vehicleImage
+    );
+    fs.unlinkSync( vehicleImageDir )
     await Vehicles.findByIdAndDelete(vehicle._id);
-
+// delete from filesystem
     res.json({ status: 200, msg: "Vehicle deleted" });
   } catch (err) {
     console.error(err);

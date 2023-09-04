@@ -350,7 +350,7 @@ const index = () => {
   }, []);
 
   const handleDelete = async () => {
-    console.log("helo");
+
     const response = await fetch(
       `http://localhost:8000/vehicles/${userDetails._id}`,
       {
@@ -360,7 +360,7 @@ const index = () => {
     console.log(userDetails._id);
     const result = await response.json();
     if ((result.status = "200")) {
-      router.reload();
+      fetchVehicleDetails();
     }
   };
   const [openConfirmDialog, setOpenConfirmDialog] = React.useState(false);
