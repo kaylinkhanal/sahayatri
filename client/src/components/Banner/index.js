@@ -8,13 +8,13 @@ const index = () => {
         <>
             <div className='xl:h-[900px] text-white flex justify-center items-center overflow-hidden relative mb-8'>
                 <div className=' bg-primary h-full w-full mx-8 rounded-3xl relative overflow-hidden'>
-                    <Image src='/banner.jpg' width={2000} height={500} alt='sahayatri banner' />
+                    <Image src='/banner.jpeg' width={2000} height={500} alt='sahayatri banner' />
                     
                     <div className='bg-black h-full w-full opacity-60 absolute top-0 left-0 z-10'></div>
                     
                     <div className='w-4/5 h-96  absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center z-20'>
                         <div>
-                            <Image src='/maponphone.png' width={800} height={600} alt='sahayatri banner' />
+                            <Image src='/banner-phone.png' width={800} height={600} alt='sahayatri banner' />
                         </div>
                         
                         <div className='flex flex-col items-start gap-4  ps-20'>
