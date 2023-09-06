@@ -6,12 +6,20 @@
 	right: 50px; 
 	margin: 10px;
 }
-.dropDown{
-	position: absolute;
-	top: calc(100% + 10px); /* Position below userMenu */
-	right: 50px; /* Adjust as needed to align with userMenu */
-	z-index: 100; /* Ensure it's on top of other content */ 
-}
+
+.rideInfo{
+	position: fixed;
+	margin: 10px;
+	top: 110px;
+	/* left: 200px; */
+	width: 30%;
+	height: 30%;
+	/* top: 54px; */
+	border-radius: 5px;
+	background-color: #fff;
+	padding: 10px;
+  }
+
 .searchBox {
 	/* padding: 96px; */
 	/* background-color: #fafaf8; */

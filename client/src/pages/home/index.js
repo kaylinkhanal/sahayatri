@@ -3,16 +3,26 @@ import React, { useEffect, useState } from "react";
 import { GoogleMap, useJsApiLoader, MarkerF } from "@react-google-maps/api";
 import styles from "../../styles/userMenu.module.css";
 import CheckIcon from "@mui/icons-material/Check";
+import { getDistance } from 'geolib';
 import MapSearch from "../../components/MapSearch";
 import { useSelector, useDispatch } from "react-redux";
 import { DotWave } from "@uiball/loaders";
 import { setCoords, setAddress } from "../../redux/reducerSlices/locationSlice";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import priceMap from '../../config/priceMap.json'
 function index() {
   const dispatch = useDispatch();
   const { pickCords, destinationCords } = useSelector(
     (state) => state.location
   );
+ 
+  let price 
+  const distance = getDistance(pickCords, destinationCords)/1000
+  if(priceMap.unitKmPrice * distance <  priceMap.basePrice){
+    price =priceMap.basePrice
+  }else{
+    price = distance * priceMap.unitKmPrice 
+  }
   const [searchStep, setSearchStep] = useState(1);
   const { isLoaded, loadError } = useJsApiLoader({
     googleMapsApiKey: "AIzaSyDLfjmFgDEt9_G2LXVyP61MZtVHE2M3H-0", // ,
@@ -131,6 +141,7 @@ function index() {
               <MapSearch
                 setCurrentPickUpLoc={setCurrentPickUpLoc}
                 searchStep={searchStep}
+                setCenter={setCenter}
                 showCurrentIcon={true}
                 placeholder="Pickup Address"
               />
@@ -146,6 +157,7 @@ function index() {
               <MapSearch
                 searchStep={searchStep}
                 showCurrentIcon={false}
+                setCenter={setCenter}
                 placeholder="Destination Address"
               />
               <ArrowBackIcon
@@ -162,6 +174,16 @@ function index() {
         <div className={styles.userMenu}>
           <UserMenu />
         </div>
+        <div className={styles.rideInfo}>
+        <p>
+        {distance} km
+          </p>
+          <p>
+        {price} km
+          </p>
+     
+        </div>
+
       </GoogleMap>
     );
   }

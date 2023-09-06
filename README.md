@@ -1,15 +1,15 @@
 # sahayatri
 
 ## Features
-- [ ] multi user register/login-> rider, user
-- [ ] map integrate
-- [ ] referal / promo code
+- [x] multi user register/login-> rider, user
+- [x] map integrate
 - [ ] scheduled ride
+- [ ] ride history: rider and user
 - [ ] favorite
+- [ ] referal / promo code
 - [ ] user: cancel ride
 - [ ] rating system
 - [ ] SOS 
-- [ ] ride history: rider and user
 - [ ] live location tracking
 
 

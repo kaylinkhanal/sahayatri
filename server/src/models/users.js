@@ -8,6 +8,7 @@ const userSchema = new mongoose.Schema({
       enum: ['rider', 'passenger', 'admin'],
       default: 'passenger'
       },
+    isVerifiedRider: Boolean
  
   });
   
