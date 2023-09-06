@@ -1,6 +1,6 @@
 import UserMenu from "@/components/UserMenu";
 import React, { useEffect, useState } from "react";
-import { GoogleMap, useJsApiLoader, MarkerF } from "@react-google-maps/api";
+import { GoogleMap, useJsApiLoader, MarkerF, DirectionsRenderer, DirectionsService } from "@react-google-maps/api";
 import styles from "../../styles/userMenu.module.css";
 import CheckIcon from "@mui/icons-material/Check";
 import { getDistance } from 'geolib';
@@ -11,6 +11,7 @@ import { setCoords, setAddress } from "../../redux/reducerSlices/locationSlice";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import priceMap from '../../config/priceMap.json'
 function index() {
+  const [openRideDetailsDiv , setOpenRideDetailsDiv] = useState(false)
   const dispatch = useDispatch();
   const { pickCords, destinationCords } = useSelector(
     (state) => state.location
@@ -24,6 +25,7 @@ function index() {
     price = distance * priceMap.unitKmPrice 
   }
   const [searchStep, setSearchStep] = useState(1);
+  const [routeResponse, setRouteResponse] = useState(null)
   const { isLoaded, loadError } = useJsApiLoader({
     googleMapsApiKey: "AIzaSyDLfjmFgDEt9_G2LXVyP61MZtVHE2M3H-0", // ,
     libraries: ["places"],
@@ -105,15 +107,42 @@ function index() {
     }
   };
 
+  const directionsCallback = (response)=> {
+    if (response !== null) {
+      if (response.status === 'OK') {
+  
+        setRouteResponse(response)
+      } else {
+        console.log('response: ', response)
+      }
+    }
+  }
+
   if (isLoaded) {
     return (
       <GoogleMap
         mapContainerStyle={mapContainerStyle}
         center={center}
         zoom={13}
+
       >
         {console.log(pickCords)}
-        {searchStep === 1 && (
+        <DirectionsService
+                  options={{ // eslint-disable-line react-perf/jsx-no-new-object-as-prop
+                    destination: destinationCords,
+                    origin: pickCords,
+                    travelMode: 'DRIVING'
+                  }}
+                  callback={directionsCallback}
+                />
+                {routeResponse &&  <DirectionsRenderer
+                  // required
+                    options={{ // eslint-disable-line react-perf/jsx-no-new-object-as-prop
+                      directions: routeResponse
+                    }}
+                  />}
+                 
+        {(searchStep === 1 || openRideDetailsDiv) && (
           <MarkerF
             onLoad={() => console.log("loaded")}
             position={pickCords.lat ? pickCords : center}
@@ -126,7 +155,7 @@ function index() {
             }}
           />
         )}
-        {searchStep === 2 && (
+        {(searchStep === 2 || openRideDetailsDiv) && (
           <MarkerF
             onLoad={() => console.log("loaded")}
             icon={"/destination-marker.svg"}
@@ -166,7 +195,7 @@ function index() {
               />
               <CheckIcon
                 className={styles.custom}
-                onClick={() => setSearchStep(2)}
+                onClick={() => setOpenRideDetailsDiv(true)}
               />
             </div>
           )}
@@ -174,15 +203,17 @@ function index() {
         <div className={styles.userMenu}>
           <UserMenu />
         </div>
-        <div className={styles.rideInfo}>
+        {openRideDetailsDiv &&  <div className={styles.rideInfo}>
         <p>
         {distance} km
           </p>
           <p>
-        {price} km
+          Nrs.{price} 
           </p>
-     
-        </div>
+          Time Estimate: {routeResponse?.routes?.[0]?.legs?.[0]?.duration?.text}
+
+        </div>}
+       
 
       </GoogleMap>
     );
