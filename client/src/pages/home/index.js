@@ -10,6 +10,7 @@ import { DotWave } from "@uiball/loaders";
 import { setCoords, setAddress } from "../../redux/reducerSlices/locationSlice";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import priceMap from '../../config/priceMap.json'
+
 function index() {
   const [openRideDetailsDiv , setOpenRideDetailsDiv] = useState(false)
   const dispatch = useDispatch();
@@ -18,11 +19,11 @@ function index() {
   );
  
   let price 
-  const distance = getDistance(pickCords, destinationCords)/1000
+  const distance = (getDistance(pickCords, destinationCords)/1000).toFixed(2)
   if(priceMap.unitKmPrice * distance <  priceMap.basePrice){
-    price =priceMap.basePrice
+    price = (priceMap.basePrice).toFixed(2)
   }else{
-    price = distance * priceMap.unitKmPrice 
+    price = (distance * priceMap.unitKmPrice).toFixed(2)
   }
   const [searchStep, setSearchStep] = useState(1);
   const [routeResponse, setRouteResponse] = useState(null)
@@ -138,7 +139,9 @@ function index() {
                 {routeResponse &&  <DirectionsRenderer
                   // required
                     options={{ // eslint-disable-line react-perf/jsx-no-new-object-as-prop
-                      directions: routeResponse
+                      directions: routeResponse,
+                      suppressMarkers: true,
+                      preserveViewport: true,                  
                     }}
                   />}
                  
@@ -204,14 +207,16 @@ function index() {
           <UserMenu />
         </div>
         {openRideDetailsDiv &&  <div className={styles.rideInfo}>
-        <p>
-        {distance} km
+          <p className="text-blue-500 font-bold">
+            Total distance: {distance} km
           </p>
-          <p>
-          Nrs.{price} 
+          <p className="text-blue-500 font-bold">
+            Total amount: Nrs. {price} 
           </p>
-          Time Estimate: {routeResponse?.routes?.[0]?.legs?.[0]?.duration?.text}
-
+          <p className="text-blue-500 font-bold">
+            Time Estimate: {routeResponse?.routes?.[0]?.legs?.[0]?.duration?.text}
+          </p>
+          <button className="bg-transparent w-full mt-4 py-1 font-semibold text-blue-500 border-2 border-blue-500 rounded-md hover:bg-blue-500 hover:text-white">Make a Ride</button>
         </div>}
        
 
