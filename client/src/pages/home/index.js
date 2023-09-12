@@ -10,13 +10,16 @@ import { DotWave } from "@uiball/loaders";
 import { setCoords, setAddress } from "../../redux/reducerSlices/locationSlice";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import priceMap from '../../config/priceMap.json'
-
-function index() {
+import { io } from 'socket.io-client';
+const URL = 'http://localhost:8000';
+export const socket = io(URL);
+function index(props) {
   const [openRideDetailsDiv , setOpenRideDetailsDiv] = useState(false)
   const dispatch = useDispatch();
-  const { pickCords, destinationCords } = useSelector(
+  const { pickCords,pickUpAddress,destinationAddress, destinationCords } = useSelector(
     (state) => state.location
   );
+  const {userDetails} = useSelector(state=> state.user)
  
   let price 
   const distance = (getDistance(pickCords, destinationCords)/1000).toFixed(2)
@@ -52,6 +55,7 @@ function index() {
     lng: 85.307631,
   });
 
+
   // Just playing around with static data
   const dest = {
     lat: 26.4175616,
@@ -67,9 +71,9 @@ function index() {
     lng: centerLng,
   };
 
-  // useEffect(() => {
-
-  // }, [])
+  useEffect(() => {
+    socket.on('connection')
+  }, [])
 
   const setCurrentPickUpLoc = () => {
     navigator.geolocation.getCurrentPosition((pos) => {
@@ -85,6 +89,17 @@ function index() {
     width: "100vw",
   };
 
+  const handleRideRequest = ()=>{
+   socket.emit('rideRequests', { distance, price, pickupCoords: pickCords, destinationCoords:destinationCords, userId:userDetails._id,pickUpAddress,destinationAddress} )
+  }
+  const mapContainerStyleRider = {
+    height: "100vh",
+    width: "80vw",
+    borderRadius: "40px",
+    right: 0,
+    position: "absolute",
+    overflow: "hidden"
+}
   const handleDrag = async (e, locType) => {
     const currentLocation = {
       lat: e.latLng.lat(),
@@ -122,105 +137,107 @@ function index() {
   if (isLoaded) {
     return (
       <GoogleMap
-        mapContainerStyle={mapContainerStyle}
-        center={center}
-        zoom={13}
+      mapContainerStyle={mapContainerStyle}
+      center={center}
+      zoom={13}
 
-      >
-        {console.log(pickCords)}
-        <DirectionsService
+    >
+      {console.log(pickCords)}
+      <DirectionsService
+                options={{ // eslint-disable-line react-perf/jsx-no-new-object-as-prop
+                  destination: destinationCords,
+                  origin: pickCords,
+                  travelMode: 'DRIVING'
+                }}
+                callback={directionsCallback}
+              />
+              {routeResponse &&  <DirectionsRenderer
+                // required
                   options={{ // eslint-disable-line react-perf/jsx-no-new-object-as-prop
-                    destination: destinationCords,
-                    origin: pickCords,
-                    travelMode: 'DRIVING'
+                    directions: routeResponse,
+                    suppressMarkers: true,
+                    preserveViewport: true,                  
                   }}
-                  callback={directionsCallback}
-                />
-                {routeResponse &&  <DirectionsRenderer
-                  // required
-                    options={{ // eslint-disable-line react-perf/jsx-no-new-object-as-prop
-                      directions: routeResponse,
-                      suppressMarkers: true,
-                      preserveViewport: true,                  
-                    }}
-                  />}
-                 
-        {(searchStep === 1 || openRideDetailsDiv) && (
-          <MarkerF
-            onLoad={() => console.log("loaded")}
-            position={pickCords.lat ? pickCords : center}
-            onDragEnd={(e) => handleDrag(e, "pickUpAddress")}
-            draggable={true}
-            icon={{
-              // path: google.maps.SymbolPath.CIRCLE,
+                />}
+               
+      {(searchStep === 1 || openRideDetailsDiv) && (
+        <MarkerF
+          onLoad={() => console.log("loaded")}
+          position={pickCords.lat ? pickCords : center}
+          onDragEnd={(e) => handleDrag(e, "pickUpAddress")}
+          draggable={true}
+          icon={{
+            // path: google.maps.SymbolPath.CIRCLE,
 
-              url: "/pickuplocation.png",
-            }}
-          />
+            url: "/pickuplocation.png",
+          }}
+        />
+      )}
+      {(searchStep === 2 || openRideDetailsDiv) && (
+        <MarkerF
+          onLoad={() => console.log("loaded")}
+          icon={"/destination-marker.svg"}
+          position={destinationCords.lat ? destinationCords : center}
+          onDragEnd={(e) => handleDrag(e, "destinationAddress")}
+          draggable={true}
+        />
+      )}
+      <div className={styles.map}>
+        {searchStep === 1 && (
+          <div className="flex items-center gap-1">
+            <MapSearch
+              setCurrentPickUpLoc={setCurrentPickUpLoc}
+              searchStep={searchStep}
+              setCenter={setCenter}
+              showCurrentIcon={true}
+              placeholder="Pickup Address"
+            />
+
+            <CheckIcon
+              className={styles.custom}
+              onClick={() => setSearchStep(2)}
+            />
+          </div>
         )}
-        {(searchStep === 2 || openRideDetailsDiv) && (
-          <MarkerF
-            onLoad={() => console.log("loaded")}
-            icon={"/destination-marker.svg"}
-            position={destinationCords.lat ? destinationCords : center}
-            onDragEnd={(e) => handleDrag(e, "destinationAddress")}
-            draggable={true}
-          />
+        {searchStep === 2 && (
+          <div className="flex items-center gap-1">
+            <MapSearch
+              searchStep={searchStep}
+              showCurrentIcon={false}
+              setCenter={setCenter}
+              placeholder="Destination Address"
+            />
+            <ArrowBackIcon
+              className={styles.custom}
+              onClick={() => setSearchStep(1)}
+            />
+            <CheckIcon
+              className={styles.custom}
+              onClick={() => setOpenRideDetailsDiv(true)}
+            />
+          </div>
         )}
-        <div className={styles.map}>
-          {searchStep === 1 && (
-            <div className="flex items-center gap-1">
-              <MapSearch
-                setCurrentPickUpLoc={setCurrentPickUpLoc}
-                searchStep={searchStep}
-                setCenter={setCenter}
-                showCurrentIcon={true}
-                placeholder="Pickup Address"
-              />
+      </div>
+      <div className={styles.userMenu}>
+        <UserMenu />
+      </div>
+      {openRideDetailsDiv &&  <div className={styles.rideInfo}>
+        <p className="text-blue-500 font-bold">
+          Total distance: {distance} km
+        </p>
+        <p className="text-blue-500 font-bold">
+          Total amount: Nrs. {price} 
+        </p>
+        <p className="text-blue-500 font-bold">
+          Time Estimate: {routeResponse?.routes?.[0]?.legs?.[0]?.duration?.text}
+        </p>
+        <button
+         onClick={handleRideRequest}
+        className="bg-transparent w-full mt-4 py-1 font-semibold text-blue-500 border-2 border-blue-500 rounded-md hover:bg-blue-500 hover:text-white">Make a Ride</button>
+      </div>}
+     
 
-              <CheckIcon
-                className={styles.custom}
-                onClick={() => setSearchStep(2)}
-              />
-            </div>
-          )}
-          {searchStep === 2 && (
-            <div className="flex items-center gap-1">
-              <MapSearch
-                searchStep={searchStep}
-                showCurrentIcon={false}
-                setCenter={setCenter}
-                placeholder="Destination Address"
-              />
-              <ArrowBackIcon
-                className={styles.custom}
-                onClick={() => setSearchStep(1)}
-              />
-              <CheckIcon
-                className={styles.custom}
-                onClick={() => setOpenRideDetailsDiv(true)}
-              />
-            </div>
-          )}
-        </div>
-        <div className={styles.userMenu}>
-          <UserMenu />
-        </div>
-        {openRideDetailsDiv &&  <div className={styles.rideInfo}>
-          <p className="text-blue-500 font-bold">
-            Total distance: {distance} km
-          </p>
-          <p className="text-blue-500 font-bold">
-            Total amount: Nrs. {price} 
-          </p>
-          <p className="text-blue-500 font-bold">
-            Time Estimate: {routeResponse?.routes?.[0]?.legs?.[0]?.duration?.text}
-          </p>
-          <button className="bg-transparent w-full mt-4 py-1 font-semibold text-blue-500 border-2 border-blue-500 rounded-md hover:bg-blue-500 hover:text-white">Make a Ride</button>
-        </div>}
-       
-
-      </GoogleMap>
+    </GoogleMap>
     );
   }
 

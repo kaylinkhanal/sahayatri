@@ -4,9 +4,9 @@ const RidesSchema = new mongoose.Schema({
     riderId: String,
     price: Number,
     distance: Number,
-    pickupLocation: String,
+    pickUpAddress: String,
     pickupCoords: Object,
-    destinationLocation: String,
+    destinationAddress: String,
     destinationCoords: Object,
     status: {
       type: String,   
