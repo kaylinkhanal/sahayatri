@@ -3,6 +3,7 @@
 ## Features
 - [x] multi user register/login-> rider, user
 - [x] map integrate
+- [x] route
 - [ ] scheduled ride
 - [ ] ride history: rider and user
 - [ ] favorite
