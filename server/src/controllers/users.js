@@ -108,7 +108,7 @@ const switchUserMode = async (req, res) => {
 const changeUserPassword = async (req, res) => {
   try {
     const userId = req.params.userId;
-    const user = await Users.findById(userId)
+    const user = await Users.findById(userId);
     if (!user)
       return res.status(404).json({
         success: false,
@@ -124,16 +124,16 @@ const changeUserPassword = async (req, res) => {
     if (isMatched) {
       const hashedPassword = await bcrypt.hash(req.body.password, 10);
       req.body.password = hashedPassword;
-      const updatedUser = await Users.findByIdAndUpdate(
-           userId, { password: req.body.password },
-      )
+      const updatedUser = await Users.findByIdAndUpdate(userId, {
+        password: req.body.password,
+      });
 
       if (updatedUser) {
         res.status(200).json({
           success: true,
-          message: "Successfully changed password"
+          message: "Successfully changed password",
         });
-      } 
+      }
     } else {
       return res.status(401).json({
         success: false,
