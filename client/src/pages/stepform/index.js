@@ -28,6 +28,7 @@ const SignupSchema = Yup.object().shape({
 
 export default function Login() {
   const dispatch = useDispatch();
+  const [formStep, setFormStep]= useState(1)
   const router = useRouter();
   const [responseMsg, setResponseMsg] = useState({ msgLabel: "", msgType: "" });
 
@@ -48,12 +49,7 @@ export default function Login() {
           msgLabel: "Login successful, Welcome!",
           msgType: "success",
         });
-        if(result.data.userDetails.role !== 'passenger'){
-          router.push("/"+result.data.userDetails.role);
-        }else{
-          router.push("/")
-        }
-       
+        router.push("/");
       } else {
         setResponseMsg({ msgLabel: result.data.msg, msgType: "error" });
       }
@@ -74,7 +70,7 @@ export default function Login() {
             phoneNumber: "",
             password: "",
           }}
-          validationSchema={SignupSchema}
+          // validationSchema={SignupSchema}
           onSubmit={(values) => {
             // same shape as initial values
             handleLogin(values);
@@ -91,7 +87,10 @@ export default function Login() {
                   {responseMsg.msgLabel}{" "}
                 </Alert>
               )}
-              <label
+
+              {formStep  === 1 && (
+                <div>
+                  <label
                 htmlFor="phoneNumber"
                 className="block text-sm font-medium leading-6 text-gray-900 mt-5"
               >
@@ -106,7 +105,18 @@ export default function Login() {
                 <div className="text-red-500">{errors.phoneNumber}</div>
               ) : null}
 
-              <label
+                <button
+                onClick={()=> setFormStep(2)}
+                className="flex mt-6 w-full justify-center rounded-xl bg-indigo-600 px-3 py-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 active:bg-indigo-800"
+              >
+                Next
+              </button>
+                </div>
+              )}
+              
+              {formStep === 2 && (
+                <div>
+                   <label
                 htmlFor="password"
                 className="block text-sm font-medium leading-6 text-gray-900 mt-5"
               >
@@ -120,13 +130,24 @@ export default function Login() {
               {errors.password && touched.password ? (
                 <div className="text-red-500">{errors.password}</div>
               ) : null}
+                <button
+                  onClick={()=> setFormStep(stepFormm)}
+                  className="flex mt-6 w-full justify-center rounded-xl bg-indigo-600 px-3 py-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 active:bg-indigo-800"
+                >
+                  Back
+                </button>
+                <button
+                  type="submit"
+                  className="flex mt-6 w-full justify-center rounded-xl bg-indigo-600 px-3 py-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 active:bg-indigo-800"
+                >
+                  Log In
+                </button>
+                </div>
 
-              <button
-                type="submit"
-                className="flex mt-6 w-full justify-center rounded-xl bg-indigo-600 px-3 py-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 active:bg-indigo-800"
-              >
-                Log In
-              </button>
+              )}
+
+             //
+
 
               <div
                 className="text-sm text-gray-400 cursor-pointer hover:text-gray-900 text-center pt-4"

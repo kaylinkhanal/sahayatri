@@ -307,7 +307,7 @@ const index = () => {
   const [vehicleDetails, setVechicleDetails] = useState({});
 
   // Getting userDetails from the store
-  const { userDetails } = useSelector((state) => state.user);
+  const { userDetails,token } = useSelector((state) => state.user);
 
   // Getting a user role from the store
   const role = userDetails.role;
@@ -339,7 +339,12 @@ const index = () => {
 
   const fetchVehicleDetails = async () => {
     const response = await fetch(
-      " http://localhost:8000/vehicles/" + userDetails._id
+      " http://localhost:8000/vehicles/" + userDetails._id,
+    {
+      headers: {
+        'Authorization': 'Bearer '+ token
+      }
+    }
     );
     const result = await response.json();
     setVechicleDetails(result.data);

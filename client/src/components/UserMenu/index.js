@@ -16,8 +16,10 @@ function UserMenu() {
 
   const displayName = () => {
     const { fullName } = userDetails;
-    const fullNameArr = fullName.split(" ");
-    return fullNameArr[0][0] + fullNameArr[fullNameArr.length - 1][0];
+    if(fullName){
+      const fullNameArr = fullName?.split(" ");
+      return fullNameArr[0][0] + fullNameArr[fullNameArr.length - 1][0];
+    }
   };
 
   const [anchorEl, setAnchorEl] = React.useState(null);

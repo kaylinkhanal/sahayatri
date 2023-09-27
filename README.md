@@ -4,15 +4,13 @@
 - [x] multi user register/login-> rider, user
 - [x] map integrate
 - [x] route
-- [ ] scheduled ride
-- [ ] ride history: rider and user
-- [ ] favorite
-- [ ] referal / promo code
-- [ ] user: cancel ride
-- [ ] rating system
-- [ ] SOS 
-- [ ] live location tracking
+- [_] scheduled ride
+- [x] ride history: rider and user
 
+- [ ] referal / promo code
+- [x] user: cancel ride
+- [x] live location tracking
+- [_] favorite
 
 
 ## First Phase

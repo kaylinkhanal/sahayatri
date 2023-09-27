@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const verifyToken = require('../middlewares/verifyToken')
 const multer = require("multer");
 const VehicleController = require("../controllers/vehicles");
 const storage = multer.diskStorage({
@@ -18,13 +19,14 @@ router.post(
   upload.single("vehicleImage"),
   VehicleController.addVehicles
 );
-router.get("/vehicles", VehicleController.getAllVehicles);
+
+// router.get("/vehicles", test, VehicleController.getAllVehicles);
 // router.get('/vehicles/:vehicleId',  VehicleController.getVehicleDetailsById)
 // router.get('/vehicle-image/:vehicleId',  VehicleController.getVehicleImageByVehicleId)
 
 router.get("/vehicle-image/:userId", VehicleController.getVehicleImageByUserId);
 
-router.get("/vehicles/:userId", VehicleController.getVehiclesByUserId);
+router.get("/vehicles/:userId", verifyToken, VehicleController.getVehiclesByUserId);
 
-router.delete("/vehicles/:userId", VehicleController.deleteVehiclesByUserId);
+router.delete("/vehicles/:userId",  VehicleController.deleteVehiclesByUserId);
 module.exports = router;
