@@ -32,8 +32,7 @@ function index(props) {
         lng: longitude,
       };
 
-
-	  props.setCenter(currentLocation);
+      props.setCenter(currentLocation);
       const locType =
         props.searchStep == 1 ? "pickUpAddress" : "destinationAddress";
 
