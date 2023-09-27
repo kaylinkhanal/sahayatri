@@ -1,6 +1,8 @@
 const mongoose = require("mongoose");
 const RidesSchema = new mongoose.Schema({
-    userId:  String,
+    user:  { type: mongoose.Schema.Types.ObjectId,
+      ref: "Users"
+    },
     riderId: String,
     price: Number,
     distance: Number,
@@ -10,7 +12,8 @@ const RidesSchema = new mongoose.Schema({
     destinationCoords: Object,
     status: {
       type: String,   
-      enum: ['pending', 'rideScheduled', 'riderOnHisWay', 'riderPickedUp', 'rideCompleted', 'cancel']
+      enum: ['pending', 'rideScheduled', 'riderOnHisWay', 'riderPickedUp', 'rideCompleted', 'cancel'],
+      default: 'pending'
       },
   },{
     timestamps: true

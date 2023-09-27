@@ -1,6 +1,6 @@
 import UserMenu from "@/components/UserMenu";
 import React, { useEffect, useState } from "react";
-import { GoogleMap, useJsApiLoader, MarkerF, DirectionsRenderer, DirectionsService } from "@react-google-maps/api";
+import { GoogleMap,Circle, useJsApiLoader, MarkerF, DirectionsRenderer, DirectionsService } from "@react-google-maps/api";
 import styles from "../../styles/userMenu.module.css";
 import CheckIcon from "@mui/icons-material/Check";
 import { getDistance } from 'geolib';
@@ -14,6 +14,7 @@ import { io } from 'socket.io-client';
 const URL = 'http://localhost:8000';
 export const socket = io(URL);
 function index(props) {
+  const [rideRequested, setRideRequested] = useState(false)
   const [openRideDetailsDiv , setOpenRideDetailsDiv] = useState(false)
   const dispatch = useDispatch();
   const { pickCords,pickUpAddress,destinationAddress, destinationCords } = useSelector(
@@ -29,13 +30,26 @@ function index(props) {
     price = (distance * priceMap.unitKmPrice).toFixed(2)
   }
   const [searchStep, setSearchStep] = useState(1);
+  const [riderLocationInfo, setRiderLocationInfo] = useState({})
+  const [acceptanceDetails, setAcceptanceDetails] = useState({})
   const [routeResponse, setRouteResponse] = useState(null)
   const { isLoaded, loadError } = useJsApiLoader({
-    googleMapsApiKey: "AIzaSyDLfjmFgDEt9_G2LXVyP61MZtVHE2M3H-0", // ,
+    googleMapsApiKey: "AIzaSyCBYY-RtAAYnN1w_wAFmsQc2wz0ReCjriI", // ,
     libraries: ["places"],
     // ...otherOptions
   });
 
+  useEffect(()=>{
+    socket.on('acceptanceDetails', acceptanceDetails=>{
+      if(acceptanceDetails?.user?._id  === userDetails._id){
+        setAcceptanceDetails(acceptanceDetails)
+      }
+    })
+
+    socket.on('riderLocationInfo', riderLocationInfo=>{
+      setRiderLocationInfo(riderLocationInfo)
+    })
+  })
   const options = {
     strokeColor: "#FF0000",
     strokeOpacity: 0.8,
@@ -90,7 +104,10 @@ function index(props) {
   };
 
   const handleRideRequest = ()=>{
-   socket.emit('rideRequests', { distance, price, pickupCoords: pickCords, destinationCoords:destinationCords, userId:userDetails._id,pickUpAddress,destinationAddress} )
+    if(!rideRequested){
+      setRideRequested(true)
+      socket.emit('rideRequests', { distance, price, pickupCoords: pickCords, destinationCoords:destinationCords, user:userDetails._id,pickUpAddress,destinationAddress} )
+    }
   }
   const mapContainerStyleRider = {
     height: "100vh",
@@ -133,7 +150,19 @@ function index(props) {
       }
     }
   }
-
+  const options2 = {
+    strokeColor: '#FF0000',
+    strokeOpacity: 0.8,
+    strokeWeight: 2,
+    fillColor: '#FF0000',
+    fillOpacity: 0.35,
+    clickable: false,
+    draggable: false,
+    editable: false,
+    visible: true,
+    radius: 30000,
+    zIndex: 999
+  }
   if (isLoaded) {
     return (
       <GoogleMap
@@ -142,30 +171,36 @@ function index(props) {
       zoom={13}
 
     >
-      {console.log(pickCords)}
-      <DirectionsService
+      {/* <Circle
+      // required
+      center={center}
+      // required
+      options={options2}
+    /> */}
+   
+      {/* <DirectionsService
                 options={{ // eslint-disable-line react-perf/jsx-no-new-object-as-prop
                   destination: destinationCords,
                   origin: pickCords,
                   travelMode: 'DRIVING'
                 }}
                 callback={directionsCallback}
-              />
-              {routeResponse &&  <DirectionsRenderer
+              /> */}
+              {/* {routeResponse &&  <DirectionsRenderer
                 // required
                   options={{ // eslint-disable-line react-perf/jsx-no-new-object-as-prop
                     directions: routeResponse,
                     suppressMarkers: true,
                     preserveViewport: true,                  
                   }}
-                />}
+                />} */}
                
       {(searchStep === 1 || openRideDetailsDiv) && (
         <MarkerF
           onLoad={() => console.log("loaded")}
           position={pickCords.lat ? pickCords : center}
           onDragEnd={(e) => handleDrag(e, "pickUpAddress")}
-          draggable={true}
+          draggable={!props.isRider}
           icon={{
             // path: google.maps.SymbolPath.CIRCLE,
 
@@ -173,16 +208,29 @@ function index(props) {
           }}
         />
       )}
-      {(searchStep === 2 || openRideDetailsDiv) && (
+      {(searchStep === 2 || openRideDetailsDiv || props.isRider) && (
         <MarkerF
           onLoad={() => console.log("loaded")}
           icon={"/destination-marker.svg"}
           position={destinationCords.lat ? destinationCords : center}
           onDragEnd={(e) => handleDrag(e, "destinationAddress")}
-          draggable={true}
+          draggable={!props.isRider}
         />
       )}
-      <div className={styles.map}>
+
+      
+      {((acceptanceDetails?.riderLocationCoords?.lat || riderLocationInfo.lat) && !props.isRider) && (
+              <MarkerF
+              style={{fontSize: '10px'}}
+              onLoad={() => console.log("loaded")}
+              position={riderLocationInfo.lat ? riderLocationInfo:  acceptanceDetails?.riderLocationCoords}
+              icon={{
+                url: "/bike.png",
+              }}
+              />
+            )}
+      {!props.isRider && (
+        <div className={styles.map}>
         {searchStep === 1 && (
           <div className="flex items-center gap-1">
             <MapSearch
@@ -218,6 +266,7 @@ function index(props) {
           </div>
         )}
       </div>
+      )}
       <div className={styles.userMenu}>
         <UserMenu />
       </div>
@@ -228,12 +277,22 @@ function index(props) {
         <p className="text-blue-500 font-bold">
           Total amount: Nrs. {price} 
         </p>
+        {JSON.stringify(riderLocationInfo)}
         <p className="text-blue-500 font-bold">
           Time Estimate: {routeResponse?.routes?.[0]?.legs?.[0]?.duration?.text}
         </p>
-        <button
-         onClick={handleRideRequest}
-        className="bg-transparent w-full mt-4 py-1 font-semibold text-blue-500 border-2 border-blue-500 rounded-md hover:bg-blue-500 hover:text-white">Make a Ride</button>
+       
+        {Object.keys(acceptanceDetails).length === 0 ?  
+        ( <button
+         onClick={ handleRideRequest}
+        className="bg-transparent w-full mt-4 py-1 font-semibold text-blue-500 border-2 border-blue-500 rounded-md hover:bg-blue-500 hover:text-white">
+         {rideRequested ? 'Please wait for rider confirmation' :  'Make a Ride'} </button>):
+            <p className="text-blue-500 font-bold">
+           Rider : {acceptanceDetails?.fullName} ({acceptanceDetails?.phoneNumber}) is on his way 
+          </p>
+        }
+       
+          
       </div>}
      
 
