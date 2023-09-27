@@ -200,7 +200,7 @@ function index(props) {
           onLoad={() => console.log("loaded")}
           position={pickCords.lat ? pickCords : center}
           onDragEnd={(e) => handleDrag(e, "pickUpAddress")}
-          draggable={!props.isRider}
+          draggable={!props.isRider && !rideRequested }
           icon={{
             // path: google.maps.SymbolPath.CIRCLE,
 
@@ -214,7 +214,7 @@ function index(props) {
           icon={"/destination-marker.svg"}
           position={destinationCords.lat ? destinationCords : center}
           onDragEnd={(e) => handleDrag(e, "destinationAddress")}
-          draggable={!props.isRider}
+          draggable={!props.isRider && !rideRequested}
         />
       )}
 
